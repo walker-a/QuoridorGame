@@ -11,8 +11,8 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 /**
- * A slightly more complex GUI, with buttons and text and multiple layouts.
- * Created by adalal on 2/23/16.
+ * Overall view of the Quoridor game
+ * Created by Isaac Garfinkle, Mitchell Biewen, and Alex Walker on 2/28/16.
  */
 public class QuoridorGui extends Application {
     public static final int MIN_BUTTON_WIDTH = 60;
@@ -20,6 +20,10 @@ public class QuoridorGui extends Application {
     public static final int SCENE_HEIGHT = 1000;
     QuoridorBoard board = new QuoridorBoard();
 
+    /**
+     * runs the GUI
+     * @param primaryStage
+     */
     @Override
     public void start(Stage primaryStage) {
         BorderPane root = new BorderPane();
@@ -39,6 +43,11 @@ public class QuoridorGui extends Application {
         primaryStage.show();
     }
 
+    /**
+     * Adds a node for all the player functions going on the side panel
+     * @param playerName
+     * @return playerPane node
+     */
     private Node addPlayerPane(String playerName) {
         GridPane playerPane = new GridPane();
         playerPane.setAlignment(Pos.CENTER);
@@ -47,21 +56,38 @@ public class QuoridorGui extends Application {
         playerPane.setPadding(new Insets(0, 10, 0, 10));
 
         Label playerNameLabel = new Label(playerName);
-        Button movePieceButton = new Button("Move Piece");
-        Button placeWallButton = new Button("Place Wall");
-        Label wallCountLabel = new Label("10");
 
-        movePieceButton.setMinWidth(MIN_BUTTON_WIDTH);
-        placeWallButton.setMinWidth(MIN_BUTTON_WIDTH);
+        //not going to be present in final prouduct
+        Label instructions = new Label("Click a center gap");
+        Label instructions2 = new Label("to place wall");
+
+        Button placeHorizontalWallButton = new Button("Place Horizontal Wall");
+        placeHorizontalWallButton.setOnMouseClicked(event -> {
+            board.setHorizontalWallWasClicked();
+            playerPane.add(instructions, 0, 10);
+            playerPane.add(instructions2, 0, 11);});
+        Button placeVerticalWallButton = new Button("Place Vertical Wall");
+        placeVerticalWallButton.setOnMouseClicked(event -> {
+            board.setVerticalWallWasClicked();
+            playerPane.add(instructions, 0, 10);
+            playerPane.add(instructions2, 0, 11);});
+        Label wallCountLabel = new Label("Wall Count: 10");
+
+        placeHorizontalWallButton.setMinWidth(MIN_BUTTON_WIDTH);
+        placeVerticalWallButton.setMinWidth(MIN_BUTTON_WIDTH);
 
         playerPane.add(playerNameLabel, 0, 0);
-        playerPane.add(movePieceButton, 0, 1);
-        playerPane.add(placeWallButton, 0, 2);
-        playerPane.add(wallCountLabel, 1, 2);
+        playerPane.add(placeHorizontalWallButton, 0, 1);
+        playerPane.add(placeVerticalWallButton, 0, 2);
+        playerPane.add(wallCountLabel, 0, 3);
 
         return playerPane;
     }
 
+    /**
+     * gets the game board node from the QuoridorBoard class and positions it in the center
+     * @return boardPane node
+     */
     private Node addBoard() {
         GridPane boardPane = board.getBoardPane();
         boardPane.setAlignment(Pos.TOP_CENTER);
@@ -69,6 +95,10 @@ public class QuoridorGui extends Application {
         return boardPane;
     }
 
+    /**
+     * Returns the node consisting of the menu bar and game title
+     * @return titleMenuPane node
+     */
     private Node addMenusAndTitles() {
         GridPane titleMenuPane = new GridPane();
         Node menuPane = addMenus();
@@ -78,6 +108,10 @@ public class QuoridorGui extends Application {
         return titleMenuPane;
     }
 
+    /**
+     * Returns a node consisting of the game's title pane
+     * @return titlePane node
+     */
     private Node addTitlePane() {
         GridPane titlePane = new GridPane();
         Label titleLabel = new Label("Quoridor");
@@ -88,6 +122,10 @@ public class QuoridorGui extends Application {
         return titlePane;
     }
 
+    /**
+     * returns a node consisting of the game menu bar
+     * @return
+     */
     private Node addMenus() {
         HBox menuPane = new HBox();
         menuPane.setAlignment(Pos.TOP_LEFT);
