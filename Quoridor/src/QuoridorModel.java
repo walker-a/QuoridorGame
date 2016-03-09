@@ -152,10 +152,10 @@ public class QuoridorModel {
     public void wallPlaced() {
         if (isPlayerOneTurn() && playerOneWallCount > 0) {
             playerOneWallCount--;
-            view.updatePlayerOneWallCount();
+            view.updatePlayerOneWallCount(playerOneWallCount);
         } else if (playerTwoWallCount > 0){
             playerTwoWallCount--;
-            view.updatePlayerTwoWallCount();
+            view.updatePlayerTwoWallCount(playerTwoWallCount);
         }
     }
 

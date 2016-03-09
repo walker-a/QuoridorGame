@@ -143,15 +143,15 @@ public class QuoridorGui extends Application {
         return playerTwoPane;
     }
 
-    public void updatePlayerOneWallCount() {
-        Label playerOneWallCount = new Label("Wall Count: " + model.getPlayerOneWallCount() + " ");
+    public void updatePlayerOneWallCount(int count) {
+        Label playerOneWallCount = new Label("Wall Count: " + count + " ");
         playerOnePane.getChildren().remove(playerPaneLabels[0][3][0]);
         playerOnePane.add(playerOneWallCount, 0, 3);
         playerPaneLabels[0][3][0] = playerOneWallCount;
     }
 
-    public void updatePlayerTwoWallCount() {
-        Label playerTwoWallCount = new Label("Wall Count: " + model.getPlayerTwoWallCount() + " ");
+    public void updatePlayerTwoWallCount(int count) {
+        Label playerTwoWallCount = new Label("Wall Count: " + count + " ");
         playerTwoPane.getChildren().remove(playerPaneLabels[0][3][1]);
         playerTwoPane.add(playerTwoWallCount, 0, 3);
         playerPaneLabels[0][3][1] = playerTwoWallCount;
