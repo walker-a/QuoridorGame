@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class QuoridorModel {
+    private int fakeint;
     private Coordinate playerOnePawn;
     private Coordinate playerTwoPawn;
     private boolean[][][] wallsOnBoard;
