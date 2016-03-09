@@ -82,6 +82,7 @@ public class QuoridorBoard {
                                 ((verticalWall.getyCoordinate() + 3) / 2), true)) {
                             boardPane.add(verticalWall, verticalWall.getxCoordinate(), verticalWall.getyCoordinate(), 1, 3);
                             model.placeWall(((verticalWall.getxCoordinate() + 1) / 2), ((verticalWall.getyCoordinate() + 3) / 2), true);
+                            model.wallPlaced();
                             verticalWallWasClicked = false;
                             model.endTurn();
                         }
@@ -89,6 +90,7 @@ public class QuoridorBoard {
                                 ((horizontalWall.getyCoordinate() + 1) / 2), false)) {
                             boardPane.add(horizontalWall, horizontalWall.getxCoordinate(), horizontalWall.getyCoordinate(), 3, 1);
                             model.placeWall(((horizontalWall.getxCoordinate() + 3) / 2), ((horizontalWall.getyCoordinate() + 1) / 2), false);
+                            model.wallPlaced();
                             horizontalWallWasClicked = false;
                             model.endTurn();
                         }

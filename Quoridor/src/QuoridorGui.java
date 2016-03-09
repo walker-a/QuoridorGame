@@ -23,6 +23,7 @@ public class QuoridorGui extends Application {
     public QuoridorModel model;
     public GridPane playerOnePane;
     public GridPane playerTwoPane;
+    public Label[][][] playerPaneLabels = new Label[2][5][2];
 
     public QuoridorGui() {
     }
@@ -81,8 +82,7 @@ public class QuoridorGui extends Application {
             controller.playerOneVerticalWallButtonOnClick();
         });
         Label playerOneWallCount = new Label("Wall Count: 10");
-
-        Label playerOneTurnLabel = new Label("Turn: ***");
+        Label playerOneTurnLabel = new Label("Turn: ****");
 
         placeHorizontalWallButton.setMinWidth(MIN_BUTTON_WIDTH);
         placeVerticalWallButton.setMinWidth(MIN_BUTTON_WIDTH);
@@ -90,8 +90,12 @@ public class QuoridorGui extends Application {
         playerOnePane.add(playerNameLabel, 0, 0);
         playerOnePane.add(placeHorizontalWallButton, 0, 1);
         playerOnePane.add(placeVerticalWallButton, 0, 2);
+
         playerOnePane.add(playerOneWallCount, 0, 3);
+        playerPaneLabels[0][3][0] = playerOneWallCount;
+
         playerOnePane.add(playerOneTurnLabel, 0, 4);
+        playerPaneLabels[0][4][0] = playerOneTurnLabel;
 
         return playerOnePane;
     }
@@ -121,7 +125,7 @@ public class QuoridorGui extends Application {
         });
         Label playerTwoWallCount = new Label("Wall Count: 10");
 
-        Label playerTwoTurnLabel = new Label("Turn: ***");
+        Label playerTwoTurnLabel = new Label("Turn:    ");
 
         placeHorizontalWallButton.setMinWidth(MIN_BUTTON_WIDTH);
         placeVerticalWallButton.setMinWidth(MIN_BUTTON_WIDTH);
@@ -129,18 +133,26 @@ public class QuoridorGui extends Application {
         playerTwoPane.add(playerNameLabel, 0, 0);
         playerTwoPane.add(placeHorizontalWallButton, 0, 1);
         playerTwoPane.add(placeVerticalWallButton, 0, 2);
+
         playerTwoPane.add(playerTwoWallCount, 0, 3);
+        playerPaneLabels[0][3][1] = playerTwoWallCount;
+
         playerTwoPane.add(playerTwoTurnLabel, 0, 4);
+        playerPaneLabels[0][4][1] = playerTwoTurnLabel;
 
         return playerTwoPane;
     }
-    /**
+
     public void updatePlayerOneWallCount() {
         Label playerOneWallCount = new Label("Wall Count: " + model.getPlayerOneWallCount() + " ");
+        playerOnePane.getChildren().remove(playerPaneLabels[0][3][0]);
+        playerOnePane.add(playerOneWallCount, 0, 3);
     }
 
     public void updatePlayerTwoWallCount() {
         Label playerTwoWallCount = new Label("Wall Count: " + model.getPlayerTwoWallCount() + " ");
+        playerTwoPane.getChildren().remove(playerPaneLabels[0][3][1]);
+        playerTwoPane.add(playerTwoWallCount, 0, 3);
     }
 
     public void updateTurn() {
@@ -150,12 +162,14 @@ public class QuoridorGui extends Application {
             playerOneTurnLabel = new Label("Turn: ****");
             playerTwoTurnLabel = new Label("Turn:  ");
         } else {
-            playerTwoTurnLabel = new Label("Turn: *");
+            playerTwoTurnLabel = new Label("Turn: ****");
             playerOneTurnLabel = new Label("Turn:  ");
         }
+        playerOnePane.getChildren().remove(playerPaneLabels[0][4][0]);
+        playerTwoPane.getChildren().remove(playerPaneLabels[0][4][1]);
         playerOnePane.add(playerOneTurnLabel, 0, 4);
         playerTwoPane.add(playerTwoTurnLabel, 0, 4);
-    }*/
+    }
 
     /**
      * gets the game board node from the QuoridorBoard class and positions it in the center

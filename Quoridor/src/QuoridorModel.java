@@ -61,6 +61,7 @@ public class QuoridorModel {
         }
         unclickPawnOne();
         unclickPawnTwo();
+        view.updateTurn();
     }
 
     public boolean canPlaceWall(int xCoord, int yCoord, boolean vertical) {
@@ -120,7 +121,6 @@ public class QuoridorModel {
             Coordinate currentSquare = toRead.poll();
             read.offer(currentSquare);
             for(Coordinate neighbor : currentSquare.neighborList()) {
-                neighbor.print();
                 if (neighbor.getYCoord()== goalRow) {
                     return true;
                 }
@@ -147,10 +147,15 @@ public class QuoridorModel {
             placeSouthWall(xCoord, yCoord);
             placeSouthWall(xCoord + 1, yCoord);
         }
-        if (isPlayerOneTurn()) {
+    }
+
+    public void wallPlaced() {
+        if (isPlayerOneTurn() && playerOneWallCount > 0) {
             playerOneWallCount--;
-        } else {
+            view.updatePlayerOneWallCount();
+        } else if (playerTwoWallCount > 0){
             playerTwoWallCount--;
+            view.updatePlayerTwoWallCount();
         }
     }
 
@@ -320,6 +325,14 @@ public class QuoridorModel {
         return playerOneTurn;
     }
 
+    public int getPlayerOneWallCount() {
+        return playerOneWallCount;
+    }
+
+    public int getPlayerTwoWallCount() {
+        return playerOneWallCount;
+    }
+
     public void clickPawnOne() {
         pawnOneClicked = true;
     }
@@ -395,6 +408,7 @@ public class QuoridorModel {
             return neighbors;
         }
 
+        //print coordinates for debugging purposes
         public void print() {
             System.out.println((xCoord+","+yCoord));
         }
