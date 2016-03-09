@@ -1,9 +1,14 @@
+
+
 /**
  * Created by labuser on 2/29/16.
  */
 public class QuoridorController {
-    QuoridorModel model;
+    public QuoridorModel model;
     QuoridorGui view;
+    int playerOneWallsRemaining = 10;
+    int playerTwoWallsRemaining = 10;
+
 
 
     public QuoridorController(QuoridorGui view) {

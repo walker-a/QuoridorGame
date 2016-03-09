@@ -19,13 +19,15 @@ public class QuoridorGui extends Application {
     public static final int SCENE_WIDTH = 1400;
     public static final int SCENE_HEIGHT = 800;
     public QuoridorController controller;
-    QuoridorBoard board = new QuoridorBoard(controller);
+    QuoridorBoard board;
+    //QuoridorBoard board = new QuoridorBoard(controller);
 
     public QuoridorGui() {
     }
 
     public void setController(QuoridorController quoridorController) {
         controller = quoridorController;
+        board = new QuoridorBoard(controller);
         board.setController(controller);
     }
 

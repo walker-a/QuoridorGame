@@ -1,9 +1,13 @@
+import java.util.Queue;
+import java.util.ArrayList;
+import java.util.LinkedList;
+
 /**
  * Created by walkera2 on 3/8/16.
  */
 public class QuoridorModel {
-    private PawnCoordinate playerOnePawn;
-    private PawnCoordinate playerTwoPawn;
+    private Coordinate playerOnePawn;
+    private Coordinate playerTwoPawn;
     private boolean[][][] wallsOnBoard;
     private int playerOneWallCount;
     private int playerTwoWallCount;
@@ -12,6 +16,7 @@ public class QuoridorModel {
     private boolean pawnTwoClicked;
 
     public QuoridorModel() {
+        System.out.println("I made a model");
         wallsOnBoard = new boolean[9][9][4];
         for(int xCoord = 0; xCoord<=8; xCoord++){
             for(int yCoord = 0; yCoord<=8; yCoord++){
@@ -27,7 +32,7 @@ public class QuoridorModel {
                 if (yCoord == 0) {
                     wallsOnBoard[xCoord][yCoord][0]=true;
                 }
-                if (yCoord == 9) {
+                if (yCoord == 8) {
                     wallsOnBoard[xCoord][yCoord][2]=true;
                 }
             }
@@ -35,8 +40,8 @@ public class QuoridorModel {
 
         playerOneWallCount = 10;
         playerTwoWallCount = 10;
-        playerOnePawn = new PawnCoordinate(5, 9);
-        playerTwoPawn = new PawnCoordinate(5, 1);
+        playerOnePawn = new Coordinate(5, 9);
+        playerTwoPawn = new Coordinate(5, 1);
         playerOneTurn = true;
     }
 
@@ -46,12 +51,16 @@ public class QuoridorModel {
         } else {
             playerOneTurn = true;
         }
+        System.out.println("End Turn"+playerOneTurn);
         unclickPawnOne();
         unclickPawnTwo();
     }
 
     public boolean canPlaceWall(int xCoord, int yCoord, boolean vertical) {
-        System.out.println("xCoord: " + xCoord + " yCoord: " + yCoord);
+        Coordinate coordinate = new Coordinate(xCoord,yCoord);
+        Coordinate currentPlayer;
+        int goalY;
+
         int direction;
         if (vertical) {
             direction = 1;
@@ -60,20 +69,72 @@ public class QuoridorModel {
             direction = 2;
         }
 
-        boolean canPlaceFirstHalf =  wallsOnBoard[xCoord-1][yCoord-1][direction];
+        if (playerOneTurn){
+            if (playerOneWallCount == 0){
+                return false;
+            }
+            goalY=1;
+        }
+        else {
+            if (playerTwoWallCount ==0) {
+                return false;
+            }
+            goalY=9;
+        }
+
+        boolean canPlaceFirstHalf =  !isWall(coordinate,direction);
 
         boolean canPlaceSecondHalf;
         if (vertical) {
-            canPlaceSecondHalf = wallsOnBoard[xCoord-1][yCoord][direction];
+            canPlaceSecondHalf = !isWall(getNextCell(coordinate,2),direction);
         }
         else {
-            canPlaceSecondHalf = wallsOnBoard[xCoord][yCoord-1][direction];
+            canPlaceSecondHalf = !isWall(getNextCell(coordinate,1),direction);
         }
 
-        if (canPlaceFirstHalf != canPlaceSecondHalf) {
+        if (!(canPlaceFirstHalf && canPlaceSecondHalf)){
+
             return false;
         }
-        return (!(canPlaceFirstHalf && canPlaceSecondHalf));
+
+        placeWall(xCoord,yCoord,vertical);
+
+        if (hasPath(playerOnePawn, 1) && hasPath(playerTwoPawn,9)) {
+            removeWall(xCoord,yCoord,vertical);
+            return true;
+        }
+
+        removeWall(xCoord,yCoord,vertical);
+        return false;
+    }
+
+    public boolean hasPath(Coordinate pawn, int goalRow) {
+        System.out.println("Checking for a path");
+        Queue<Coordinate> toRead = new LinkedList<Coordinate>();
+        Queue<Coordinate> read = new LinkedList<Coordinate>();
+
+        toRead.offer(pawn);
+        while(!toRead.isEmpty()){
+            Coordinate currentSquare = toRead.poll();
+            read.offer(currentSquare);
+            for(Coordinate neighbor : currentSquare.neighborList()) {
+                neighbor.print();
+                if (neighbor.getYCoord()== goalRow) {
+                    return true;
+                }
+                boolean hasSeen = false;
+                for (Coordinate readSquare : read){
+                    if (readSquare.equals(neighbor)){
+                        hasSeen = true;
+                    }
+                }
+                if (!hasSeen) {
+                    toRead.offer(neighbor);
+                }
+            }
+        }
+        return false;
+
     }
 
     public void placeWall(int xCoord, int yCoord, boolean vertical) {
@@ -83,6 +144,16 @@ public class QuoridorModel {
         } else {
             placeSouthWall(xCoord, yCoord);
             placeSouthWall(xCoord + 1, yCoord);
+        }
+    }
+
+    public void removeWall(int xCoord, int yCoord, boolean vertical) {
+        if (vertical) {
+            removeEastWall(xCoord, yCoord);
+            removeEastWall(xCoord, yCoord + 1);
+        } else {
+            removeSouthWall(xCoord, yCoord);
+            removeSouthWall(xCoord + 1, yCoord);
         }
     }
 
@@ -114,30 +185,101 @@ public class QuoridorModel {
         }
     }
 
+    public void removeNorthWall(int xCoordinate, int yCoordinate) {
+        wallsOnBoard[xCoordinate - 1][yCoordinate - 1][0] = false;
+        if (yCoordinate>1) {
+            wallsOnBoard[xCoordinate - 1][yCoordinate - 2][2] = false;
+        }
+    }
+
+    public void removeEastWall(int xCoordinate, int yCoordinate) {
+        wallsOnBoard[xCoordinate - 1][yCoordinate - 1][1] = false;
+        if (xCoordinate<9){
+            wallsOnBoard[xCoordinate][yCoordinate - 1][3] = false;
+        }
+    }
+
+    public void removeSouthWall(int xCoordinate, int yCoordinate) {
+        wallsOnBoard[xCoordinate - 1][yCoordinate - 1][2] = false;
+        if (yCoordinate<9){
+            wallsOnBoard[xCoordinate - 1][yCoordinate][0] = false;
+        }
+    }
+
+    public void removeWestWall(int xCoordinate, int yCoordinate) {
+        wallsOnBoard[xCoordinate - 1][yCoordinate - 1][3] = false;
+        if (xCoordinate>1){
+            wallsOnBoard[xCoordinate - 2][yCoordinate - 1][2] = false;
+        }
+    }
+
     public boolean pawnCanMoveTo(int xCoord, int yCoord) {
-        PawnCoordinate pawnCoord;
+        Coordinate destination = new Coordinate(xCoord,yCoord);
+        Coordinate pawnCoord;
+        Coordinate otherPawnCoord;
+        ArrayList<Coordinate> potentialDestinations = new ArrayList<Coordinate>();
         if (playerOneTurn) {
             pawnCoord = playerOnePawn;
+            otherPawnCoord = playerTwoPawn;
         } else {
             pawnCoord = playerTwoPawn;
+            otherPawnCoord = playerOnePawn;
         }
-        if (pawnCoord.isAdjacent(xCoord, yCoord) && !checkIfWallBetweenTiles(pawnCoord.getXCoord(), pawnCoord.getYCoord(), xCoord, yCoord)) {
-            return true;
+
+        //Add immediate neighbors so long as you disclude the other pawn
+        for (Coordinate neighbor : pawnCoord.neighborList()) {
+            neighbor.print();
+            if (!neighbor.equals(otherPawnCoord)) {
+                potentialDestinations.add(neighbor);
+            }
+        }
+
+
+        if (pawnCoord.isAdjacent(otherPawnCoord)) {
+            int direction = directionBetweenTiles(pawnCoord,otherPawnCoord);
+            if (!isWall(otherPawnCoord,direction)) { //Add square on other side of other pawn
+                potentialDestinations.add(getNextCell(otherPawnCoord,direction));
+            }
+            else { //Add other neighbors of other pawn if wall prevents jump.
+                for(Coordinate neighbor: otherPawnCoord.neighborList()) {
+                    if (!neighbor.equals(pawnCoord)) {
+                        potentialDestinations.add(neighbor);
+                    }
+                }
+            }
+        }
+
+        for(Coordinate potential: potentialDestinations){
+            if (potential.equals(destination)) {
+                return true;
+            }
         }
         return false;
     }
 
-    public boolean checkIfWallBetweenTiles(int xInit, int yInit, int xEnd, int yEnd) {
-        if (xInit - xEnd == 1) {
-            return wallsOnBoard[xEnd-1][yEnd-1][1];
-        } else if (xInit - xEnd == -1) {
-            return wallsOnBoard[xInit-1][yInit-1][1];
-        } else if (yInit - yEnd == 1) {
-            return wallsOnBoard[xInit-1][yInit-1][2];
-        } else if (yInit - yEnd == -1) {
-            return wallsOnBoard[xEnd-1][yEnd-1][2];
+    public boolean checkIfWallBetweenTiles(Coordinate init, Coordinate end) { //Assumes tiles are adjacent
+        if (init.getXCoord() - end.getXCoord() == 1) {
+            return wallsOnBoard[end.getXCoord()-1][end.getYCoord()-1][1];
+        } else if (init.getXCoord() - end.getXCoord() == -1) {
+            return wallsOnBoard[init.getXCoord()-1][init.getYCoord()-1][1];
+        } else if (init.getYCoord() - end.getYCoord() == 1) {
+            return wallsOnBoard[init.getXCoord()-1][init.getYCoord()-1][2];
+        } else if (init.getYCoord() - end.getYCoord() == -1) {
+            return wallsOnBoard[end.getXCoord()-1][end.getYCoord()-1][2];
         }
         return true;
+    }
+
+    public int directionBetweenTiles(Coordinate init, Coordinate end) { //Assumes tiles are adjacent
+        if (init.getXCoord() - end.getXCoord() == 1) {
+            return 3;
+        } else if (init.getXCoord() - end.getXCoord() == -1) {
+            return 1;
+        } else if (init.getYCoord() - end.getYCoord() == 1) {
+            return 0;
+        } else {
+            return 2;
+        }
     }
 
     public void updatePawnCoords(int xCoord, int yCoord) {
@@ -147,6 +289,26 @@ public class QuoridorModel {
             playerTwoPawn.updateCoords(xCoord, yCoord);
         }
     }
+
+    public Coordinate getNextCell(Coordinate coordinate, int direction) {
+        if (direction == 1) {
+            return new Coordinate(coordinate.getXCoord()+1, coordinate.getYCoord());
+        }
+        else if (direction == 3) {
+            return new Coordinate(coordinate.getXCoord()-1, coordinate.getYCoord());
+        }
+        else if (direction == 0) {
+            return new Coordinate(coordinate.getXCoord(), coordinate.getYCoord()-1);
+        }
+        else{
+            return new Coordinate(coordinate.getXCoord(), coordinate.getYCoord()+1);
+        }
+    }
+
+    public boolean isWall(Coordinate coordinate, int direction) {
+        return wallsOnBoard[coordinate.getXCoord()-1][coordinate.getYCoord()-1][direction];
+    }
+
 
     public boolean isPlayerOneTurn() {
         return playerOneTurn;
@@ -176,11 +338,12 @@ public class QuoridorModel {
         return pawnTwoClicked;
     }
 
-    public class PawnCoordinate {
+
+    public class Coordinate {
         int xCoord;
         int yCoord;
 
-        public PawnCoordinate(int xCoordinate, int yCoordinate) {
+        public Coordinate(int xCoordinate, int yCoordinate) {
             xCoord = xCoordinate;
             yCoord = yCoordinate;
         }
@@ -190,11 +353,15 @@ public class QuoridorModel {
             yCoord = yCoordinate;
         }
 
-        public boolean isAdjacent(int xCoordinate, int yCoordinate) {
-            if ((Math.abs(xCoordinate - xCoord) == 1 && yCoordinate == yCoord) || (xCoordinate == xCoord && Math.abs(yCoordinate - yCoord) == 1)) {
+        public boolean isAdjacent(Coordinate coordinate) {
+            if ((Math.abs(coordinate.getXCoord() - xCoord) == 1 && coordinate.getYCoord() == yCoord) || (coordinate.getXCoord() == xCoord && Math.abs(coordinate.getYCoord() - yCoord) == 1)) {
                 return true;
             }
             return false;
+        }
+
+        public boolean equals(Coordinate coordinate) {
+            return ((coordinate.getXCoord() == xCoord) && (coordinate.getYCoord() == yCoord));
         }
 
         public int getXCoord() {
@@ -204,5 +371,28 @@ public class QuoridorModel {
         public int getYCoord() {
             return yCoord;
         }
+
+        public ArrayList<Coordinate> neighborList() {
+            ArrayList<Coordinate> neighbors = new ArrayList<Coordinate>();
+            if (!isWall(this,0)) {
+                neighbors.add(new Coordinate(xCoord,yCoord-1));
+            }
+            if (!isWall(this,1)) {
+                neighbors.add(new Coordinate(xCoord+1,yCoord));
+            }
+            if (!isWall(this,2)) {
+                neighbors.add(new Coordinate(xCoord,yCoord+1));
+            }
+            if (!isWall(this,3)) {
+                neighbors.add(new Coordinate(xCoord-1,yCoord));
+            }
+            return neighbors;
+        }
+
+        public void print() {
+            System.out.println((xCoord+","+yCoord));
+        }
     }
+
+
 }
