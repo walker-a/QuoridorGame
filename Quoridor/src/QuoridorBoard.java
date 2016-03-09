@@ -24,25 +24,20 @@ public class QuoridorBoard {
     /**
      * Instantiates the board as a new GridPane object with knowledge of the two pawns on the board
      */
-    public QuoridorBoard(QuoridorController controller) {
+    public QuoridorBoard(QuoridorController controller, QuoridorModel model) {
         this.controller = controller;
+        this.model = model;
         boardPane = new GridPane();
         boardPane.setHgap(0);
         boardPane.setVgap(0);
 
-        playerOne = new Pawn(8, 16, 25, "slategrey");
-        playerTwo = new Pawn(8, 0, 25, "lightgrey");
+        playerOne = new Pawn(8, 16, 30, "slategrey");
+        playerTwo = new Pawn(8, 0, 30, "lightgrey");
 
         horizontalWallWasClicked = false;
         verticalWallWasClicked = false;
 
         setUpBoard();
-
-        model = controller.model;
-    }
-
-    public void setController(QuoridorController controller) {
-        this.controller = controller;
     }
 
     /**
@@ -70,7 +65,6 @@ public class QuoridorBoard {
                             wasJustClicked.setYCoord(cell.getyCoordinate());
                             boardPane.setRowIndex(wasJustClicked.getGraphicsNode(), wasJustClicked.getYCoord());
                             boardPane.setColumnIndex(wasJustClicked.getGraphicsNode(), wasJustClicked.getXCoord());
-                            System.out.println("cell clicked");
                             wasJustClicked.changeColorToStart();
                             wasJustClicked = null;
                         }
@@ -85,7 +79,7 @@ public class QuoridorBoard {
                     boardPane.add(cell, i ,j);
                     cell.setOnMouseClicked(event -> {
                         if (verticalWallWasClicked && model.canPlaceWall(((verticalWall.getxCoordinate() + 1) / 2),
-                                ((verticalWall.getyCoordinate() + 3) / 2), true))  {
+                                ((verticalWall.getyCoordinate() + 3) / 2), true)) {
                             boardPane.add(verticalWall, verticalWall.getxCoordinate(), verticalWall.getyCoordinate(), 1, 3);
                             model.placeWall(((verticalWall.getxCoordinate() + 1) / 2), ((verticalWall.getyCoordinate() + 3) / 2), true);
                             verticalWallWasClicked = false;
@@ -98,7 +92,6 @@ public class QuoridorBoard {
                             horizontalWallWasClicked = false;
                             model.endTurn();
                         }
-
                     });
                 }
 

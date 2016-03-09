@@ -1,10 +1,10 @@
+/**
+ * Created by walkera2 on 3/8/16.
+ */
 import java.util.Queue;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-/**
- * Created by walkera2 on 3/8/16.
- */
 public class QuoridorModel {
     private Coordinate playerOnePawn;
     private Coordinate playerTwoPawn;
@@ -14,9 +14,15 @@ public class QuoridorModel {
     private boolean playerOneTurn;
     private boolean pawnOneClicked;
     private boolean pawnTwoClicked;
+    private QuoridorController controller;
+    private QuoridorGui view;
+    private int playerOneYGoal;
+    private int playerTwoYGoal;
 
-    public QuoridorModel() {
-        System.out.println("I made a model");
+    public QuoridorModel(QuoridorController controller, QuoridorGui view) {
+        this.controller = controller;
+        this.view = view;
+
         wallsOnBoard = new boolean[9][9][4];
         for(int xCoord = 0; xCoord<=8; xCoord++){
             for(int yCoord = 0; yCoord<=8; yCoord++){
@@ -43,6 +49,8 @@ public class QuoridorModel {
         playerOnePawn = new Coordinate(5, 9);
         playerTwoPawn = new Coordinate(5, 1);
         playerOneTurn = true;
+        playerOneYGoal = 1;
+        playerTwoYGoal = 9;
     }
 
     public void endTurn() {
@@ -51,15 +59,12 @@ public class QuoridorModel {
         } else {
             playerOneTurn = true;
         }
-        System.out.println("End Turn"+playerOneTurn);
         unclickPawnOne();
         unclickPawnTwo();
     }
 
     public boolean canPlaceWall(int xCoord, int yCoord, boolean vertical) {
         Coordinate coordinate = new Coordinate(xCoord,yCoord);
-        Coordinate currentPlayer;
-        int goalY;
 
         int direction;
         if (vertical) {
@@ -73,13 +78,11 @@ public class QuoridorModel {
             if (playerOneWallCount == 0){
                 return false;
             }
-            goalY=1;
         }
         else {
             if (playerTwoWallCount ==0) {
                 return false;
             }
-            goalY=9;
         }
 
         boolean canPlaceFirstHalf =  !isWall(coordinate,direction);
@@ -99,7 +102,7 @@ public class QuoridorModel {
 
         placeWall(xCoord,yCoord,vertical);
 
-        if (hasPath(playerOnePawn, 1) && hasPath(playerTwoPawn,9)) {
+        if (hasPath(playerOnePawn, playerOneYGoal) && hasPath(playerTwoPawn,playerTwoYGoal)) {
             removeWall(xCoord,yCoord,vertical);
             return true;
         }
@@ -109,7 +112,6 @@ public class QuoridorModel {
     }
 
     public boolean hasPath(Coordinate pawn, int goalRow) {
-        System.out.println("Checking for a path");
         Queue<Coordinate> toRead = new LinkedList<Coordinate>();
         Queue<Coordinate> read = new LinkedList<Coordinate>();
 
@@ -144,6 +146,11 @@ public class QuoridorModel {
         } else {
             placeSouthWall(xCoord, yCoord);
             placeSouthWall(xCoord + 1, yCoord);
+        }
+        if (isPlayerOneTurn()) {
+            playerOneWallCount--;
+        } else {
+            playerTwoWallCount--;
         }
     }
 
@@ -228,7 +235,6 @@ public class QuoridorModel {
 
         //Add immediate neighbors so long as you disclude the other pawn
         for (Coordinate neighbor : pawnCoord.neighborList()) {
-            neighbor.print();
             if (!neighbor.equals(otherPawnCoord)) {
                 potentialDestinations.add(neighbor);
             }
@@ -393,6 +399,4 @@ public class QuoridorModel {
             System.out.println((xCoord+","+yCoord));
         }
     }
-
-
 }

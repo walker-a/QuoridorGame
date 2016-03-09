@@ -1,20 +1,15 @@
-
-
 /**
  * Created by labuser on 2/29/16.
  */
 public class QuoridorController {
-    public QuoridorModel model;
+    QuoridorModel model;
     QuoridorGui view;
-    int playerOneWallsRemaining = 10;
-    int playerTwoWallsRemaining = 10;
 
 
-
-    public QuoridorController(QuoridorGui view) {
-        model = new QuoridorModel();
+    public QuoridorController(QuoridorGui view, QuoridorModel model) {
         this.view = view;
-        this.view.setController(this);
+        this.model = new QuoridorModel(this, view);
+        this.view.setSystems(this, this.model);
     }
 
     public void placeWallClicked() {
@@ -77,14 +72,36 @@ public class QuoridorController {
         }
     }
 
-    public void horizontalWallButtonOnClick(){ //Hopefully these will call something in model rather than view.
-        view.board.setHorizontalWallWasClickedToTrue();
-        view.board.setVerticalWallWasClickedToFalse();
+    public void playerOneHorizontalWallButtonOnClick(){ //Hopefully these will call something in model rather than view.
+        if (model.isPlayerOneTurn()) {
+            view.board.setHorizontalWallWasClickedToTrue();
+            view.board.setVerticalWallWasClickedToFalse();
+            view.board.playerOne.changeColorToStart();
+        }
     }
 
-    public void verticalWallButtonOnClick() {
-        view.board.setVerticalWallWasClickedToTrue();
-        view.board.setHorizontalWallWasClickedToFalse();
+    public void playerTwoHorizontalWallButtonOnClick(){ //Hopefully these will call something in model rather than view.
+        if (!model.isPlayerOneTurn()) {
+            view.board.setHorizontalWallWasClickedToTrue();
+            view.board.setVerticalWallWasClickedToFalse();
+            view.board.playerTwo.changeColorToStart();
+        }
+    }
+
+    public void playerOneVerticalWallButtonOnClick(){ //Hopefully these will call something in model rather than view.
+        if (model.isPlayerOneTurn()) {
+            view.board.setVerticalWallWasClickedToTrue();
+            view.board.setHorizontalWallWasClickedToFalse();
+            view.board.playerOne.changeColorToStart();
+        }
+    }
+
+    public void playerTwoVerticalWallButtonOnClick(){ //Hopefully these will call something in model rather than view.
+        if (!model.isPlayerOneTurn()) {
+            view.board.setVerticalWallWasClickedToTrue();
+            view.board.setHorizontalWallWasClickedToFalse();
+            view.board.playerTwo.changeColorToStart();
+        }
     }
 
     public static int convertFromGridPaneCoord(int gridPaneCoord) {

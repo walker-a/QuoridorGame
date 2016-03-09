@@ -51,4 +51,3 @@ public class WallCoordinate {
         return (i * 2 - 1);
     }
 }
-
