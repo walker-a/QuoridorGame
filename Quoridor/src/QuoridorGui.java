@@ -147,12 +147,14 @@ public class QuoridorGui extends Application {
         Label playerOneWallCount = new Label("Wall Count: " + model.getPlayerOneWallCount() + " ");
         playerOnePane.getChildren().remove(playerPaneLabels[0][3][0]);
         playerOnePane.add(playerOneWallCount, 0, 3);
+        playerPaneLabels[0][3][0] = playerOneWallCount;
     }
 
     public void updatePlayerTwoWallCount() {
         Label playerTwoWallCount = new Label("Wall Count: " + model.getPlayerTwoWallCount() + " ");
         playerTwoPane.getChildren().remove(playerPaneLabels[0][3][1]);
         playerTwoPane.add(playerTwoWallCount, 0, 3);
+        playerPaneLabels[0][3][1] = playerTwoWallCount;
     }
 
     public void updateTurn() {
@@ -169,6 +171,8 @@ public class QuoridorGui extends Application {
         playerTwoPane.getChildren().remove(playerPaneLabels[0][4][1]);
         playerOnePane.add(playerOneTurnLabel, 0, 4);
         playerTwoPane.add(playerTwoTurnLabel, 0, 4);
+        playerPaneLabels[0][4][0] = playerOneTurnLabel;
+        playerPaneLabels[0][4][1] = playerTwoTurnLabel;
     }
 
     /**

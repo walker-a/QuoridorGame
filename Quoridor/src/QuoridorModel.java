@@ -229,6 +229,7 @@ public class QuoridorModel {
         Coordinate destination = new Coordinate(xCoord,yCoord);
         Coordinate pawnCoord;
         Coordinate otherPawnCoord;
+        boolean pawnNeighborsIncludeOtherPawn = false;
         ArrayList<Coordinate> potentialDestinations = new ArrayList<Coordinate>();
         if (playerOneTurn) {
             pawnCoord = playerOnePawn;
@@ -243,10 +244,13 @@ public class QuoridorModel {
             if (!neighbor.equals(otherPawnCoord)) {
                 potentialDestinations.add(neighbor);
             }
+            else {
+                pawnNeighborsIncludeOtherPawn = true;
+            }
         }
 
 
-        if (pawnCoord.isAdjacent(otherPawnCoord)) {
+        if (pawnCoord.isAdjacent(otherPawnCoord) && pawnNeighborsIncludeOtherPawn) {
             int direction = directionBetweenTiles(pawnCoord,otherPawnCoord);
             if (!isWall(otherPawnCoord,direction)) { //Add square on other side of other pawn
                 potentialDestinations.add(getNextCell(otherPawnCoord,direction));
