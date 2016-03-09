@@ -15,10 +15,19 @@ import javafx.stage.Stage;
  * Created by Isaac Garfinkle, Mitchell Biewen, and Alex Walker on 2/28/16.
  */
 public class QuoridorGui extends Application {
-    public static final int MIN_BUTTON_WIDTH = 60;
+    public static final int MIN_BUTTON_WIDTH = 50;
     public static final int SCENE_WIDTH = 1400;
-    public static final int SCENE_HEIGHT = 1000;
-    QuoridorBoard board = new QuoridorBoard();
+    public static final int SCENE_HEIGHT = 800;
+    public QuoridorController controller;
+    QuoridorBoard board = new QuoridorBoard(controller);
+
+    public QuoridorGui() {
+    }
+
+    public void setController(QuoridorController quoridorController) {
+        controller = quoridorController;
+        board.setController(controller);
+    }
 
     /**
      * runs the GUI
@@ -26,6 +35,7 @@ public class QuoridorGui extends Application {
      */
     @Override
     public void start(Stage primaryStage) {
+        controller = new QuoridorController(this);
         BorderPane root = new BorderPane();
         Node boardPane = addBoard();
         Node menuAndTitlePane = addMenusAndTitles();
@@ -57,20 +67,15 @@ public class QuoridorGui extends Application {
 
         Label playerNameLabel = new Label(playerName);
 
-        //not going to be present in final prouduct
-        Label instructions = new Label("Click a center gap");
-        Label instructions2 = new Label("to place wall");
-
         Button placeHorizontalWallButton = new Button("Place Horizontal Wall");
         placeHorizontalWallButton.setOnMouseClicked(event -> {
-            board.setHorizontalWallWasClicked();
-            playerPane.add(instructions, 0, 10);
-            playerPane.add(instructions2, 0, 11);});
+            controller.horizontalWallButtonOnClick();
+        });
+
         Button placeVerticalWallButton = new Button("Place Vertical Wall");
         placeVerticalWallButton.setOnMouseClicked(event -> {
-            board.setVerticalWallWasClicked();
-            playerPane.add(instructions, 0, 10);
-            playerPane.add(instructions2, 0, 11);});
+            controller.verticalWallButtonOnClick();
+        });
         Label wallCountLabel = new Label("Wall Count: 10");
 
         placeHorizontalWallButton.setMinWidth(MIN_BUTTON_WIDTH);

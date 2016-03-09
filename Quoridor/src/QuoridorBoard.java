@@ -12,29 +12,38 @@ import javafx.scene.paint.Paint;
  * Created by Isaac Garfinkle, Mitchell Biewen, and Alex Walker on 2/28/16.
  */
 public class QuoridorBoard {
+    QuoridorController controller;
     GridPane boardPane;
     Pawn playerOne;
     Pawn playerTwo;
     Pawn wasJustClicked;
     Boolean horizontalWallWasClicked;
     Boolean verticalWallWasClicked;
+    QuoridorModel model;
 
     /**
      * Instantiates the board as a new GridPane object with knowledge of the two pawns on the board
      */
-    public QuoridorBoard() {
+    public QuoridorBoard(QuoridorController controller) {
+        this.controller = controller;
         boardPane = new GridPane();
         boardPane.setHgap(0);
         boardPane.setVgap(0);
 
-        playerOne = new Pawn(8, 0, 30, "lightgrey");
-        playerTwo = new Pawn(8, 16, 30, "slategrey");
+        playerOne = new Pawn(8, 16, 25, "slategrey");
+        playerTwo = new Pawn(8, 0, 25, "lightgrey");
 
         horizontalWallWasClicked = false;
         verticalWallWasClicked = false;
 
         setUpBoard();
-        }
+
+        model = new QuoridorModel();
+    }
+
+    public void setController(QuoridorController controller) {
+        this.controller = controller;
+    }
 
     /**
      * draws the tiles of the board and then draws the pawns
@@ -55,6 +64,7 @@ public class QuoridorBoard {
                 if (i%2==0 && j%2==0) {
                     Cell cell = new Cell(i, j, tileSize, tileSize, Paint.valueOf("tan"));
                     cell.setOnMouseClicked(event -> {
+                        controller.emptyCellClicked(cell);
                         if (wasJustClicked != null) {
                             wasJustClicked.setXCoord(cell.getxCoordinate());
                             wasJustClicked.setYCoord(cell.getyCoordinate());
@@ -74,14 +84,19 @@ public class QuoridorBoard {
                     Cell verticalWall = new Cell(i, j - 1, wallWidth, tileSize * 2 + wallWidth, Paint.valueOf("darkgrey"));;
                     boardPane.add(cell, i ,j);
                     cell.setOnMouseClicked(event -> {
-                        if (horizontalWallWasClicked) {
-                            boardPane.add(horizontalWall, horizontalWall.getxCoordinate(), horizontalWall.getyCoordinate(), 3, 1);
-                            horizontalWallWasClicked = false;
-                        }
-                        if (verticalWallWasClicked) {
+                        if (verticalWallWasClicked && model.canPlaceWall(((verticalWall.getxCoordinate() + 1) / 2),
+                                ((verticalWall.getyCoordinate() + 3) / 2), true))  {
                             boardPane.add(verticalWall, verticalWall.getxCoordinate(), verticalWall.getyCoordinate(), 1, 3);
+                            model.placeWall(((verticalWall.getxCoordinate() + 1) / 2), ((verticalWall.getyCoordinate() + 3) / 2), true);
                             verticalWallWasClicked = false;
                         }
+                        else if (horizontalWallWasClicked && model.canPlaceWall(((horizontalWall.getxCoordinate() + 3) / 2),
+                                ((horizontalWall.getyCoordinate() + 1) / 2), false)) {
+                            boardPane.add(horizontalWall, horizontalWall.getxCoordinate(), horizontalWall.getyCoordinate(), 3, 1);
+                            model.placeWall(((horizontalWall.getxCoordinate() + 3) / 2), ((horizontalWall.getyCoordinate() + 1) / 2), false);
+                            horizontalWallWasClicked = false;
+                        }
+
                     });
                 }
 
@@ -106,13 +121,13 @@ public class QuoridorBoard {
         boardPane.add(playerOne.getGraphicsNode(), playerOne.getXCoord(), playerOne.getYCoord());
         boardPane.add(playerTwo.getGraphicsNode(), playerTwo.getXCoord(), playerTwo.getYCoord());
         playerOne.getGraphicsNode().setOnMouseClicked(event -> {
-            wasJustClicked = playerOne;
-            playerOne.changeColorToYellow();
+            controller.playerOnePawnClicked();
+
         });
         playerTwo.getGraphicsNode().setOnMouseClicked(event -> {
-            wasJustClicked = playerTwo;
-            playerTwo.changeColorToYellow();
+            controller.playerTwoPawnClicked();
         });
+
         boardPane.setHalignment(playerOne.getGraphicsNode(), HPos.CENTER);
         boardPane.setHalignment(playerTwo.getGraphicsNode(), HPos.CENTER);
     }
@@ -128,23 +143,37 @@ public class QuoridorBoard {
     /**
      * Sets the state that the next click of mouse triggers a new horizontal wall
      */
-    public void setHorizontalWallWasClicked() {
+    public void setHorizontalWallWasClickedToTrue() {
         horizontalWallWasClicked = true;
+    }
+
+    /**
+     * changes the state of horizontalWallWasClicked to false
+     */
+    public void setHorizontalWallWasClickedToFalse() {
+        horizontalWallWasClicked = false;
     }
 
     /**
      * Sets the state that the next click of mouse triggers a new vertical wall
      */
-    public void setVerticalWallWasClicked() {
+    public void setVerticalWallWasClickedToTrue() {
         verticalWallWasClicked = true;
+    }
+
+    /**
+     * changes the state of verticalWallWasClicked to false
+     */
+    public void setVerticalWallWasClickedToFalse() {
+        verticalWallWasClicked = false;
     }
 
     /**
      * Cell class that is a rectangle object, but knows its position on the board
      */
     public class Cell extends Rectangle {
-        public final int xCoordinate;
-        public final int yCoordinate;
+        private final int xCoordinate;
+        private final int yCoordinate;
 
         /**
          * instantiates cell object with these parameters:
@@ -176,7 +205,6 @@ public class QuoridorBoard {
         public int getyCoordinate() {
             return yCoordinate;
         }
-
     }
 
 }
