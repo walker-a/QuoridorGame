@@ -51,11 +51,14 @@ public class QuoridorController {
                 view.board.playerOne.setYCoord(cell.getyCoordinate());
                 model.updatePawnCoords(xCoord, yCoord);
                 model.endTurn();
-
-                view.board.boardPane.setRowIndex(view.board.playerOne.getGraphicsNode(), view.board.playerOne.getYCoord());
-                view.board.boardPane.setColumnIndex(view.board.playerOne.getGraphicsNode(), view.board.playerOne.getXCoord());
-                view.board.playerOne.changeColorToStart();
             }
+            else {
+                model.unclickPawnOne();
+            }
+
+            view.board.boardPane.setRowIndex(view.board.playerOne.getGraphicsNode(), view.board.playerOne.getYCoord());
+            view.board.boardPane.setColumnIndex(view.board.playerOne.getGraphicsNode(), view.board.playerOne.getXCoord());
+            view.board.playerOne.changeColorToStart();
 
         } else if (model.pawnTwoIsClicked()) {
 
@@ -64,6 +67,9 @@ public class QuoridorController {
                 view.board.playerTwo.setYCoord(cell.getyCoordinate());
                 model.updatePawnCoords(xCoord, yCoord);
                 model.endTurn();
+            }
+            else {
+                model.unclickPawnTwo();
             }
 
             view.board.boardPane.setRowIndex(view.board.playerTwo.getGraphicsNode(), view.board.playerTwo.getYCoord());
