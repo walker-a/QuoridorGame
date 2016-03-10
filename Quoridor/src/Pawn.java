@@ -81,11 +81,11 @@ public class Pawn {
     }
 
     /**
-     * changes the pawn's color to yellow
+     * changes the pawn's color
      * @return
      */
-    public void changeColorToYellow() {
-        imageNode.setFill(Paint.valueOf("yellow"));
+    public void changeColor(String color) {
+        imageNode.setFill(Paint.valueOf(color));
     }
 
     /**

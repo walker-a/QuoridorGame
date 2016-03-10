@@ -32,7 +32,7 @@ public class QuoridorBoard {
         boardPane.setVgap(0);
 
         playerOne = new Pawn(8, 16, 30, "slategrey");
-        playerTwo = new Pawn(8, 0, 30, "lightgrey");
+        playerTwo = new Pawn(8, 0, 30, "seashell");
 
         horizontalWallWasClicked = false;
         verticalWallWasClicked = false;
@@ -58,6 +58,9 @@ public class QuoridorBoard {
             for (int j = 0; j <= 16; j++) {
                 if (i%2==0 && j%2==0) {
                     Cell cell = new Cell(i, j, tileSize, tileSize, Paint.valueOf("tan"));
+                    if (j == 0 || j == 16) {
+                        cell.setFill(Paint.valueOf("rosybrown"));
+                    }
                     cell.setOnMouseClicked(event -> {
                         controller.emptyCellClicked(cell);
                         if (wasJustClicked != null) {
@@ -74,8 +77,8 @@ public class QuoridorBoard {
 
                 if (i%2==1 && j%2==1) {
                     Cell cell = new Cell(i, j, wallWidth, wallWidth, Paint.valueOf("white"));
-                    Cell horizontalWall = new Cell(i - 1, j, tileSize * 2 + wallWidth, wallWidth, Paint.valueOf("darkgrey"));
-                    Cell verticalWall = new Cell(i, j - 1, wallWidth, tileSize * 2 + wallWidth, Paint.valueOf("darkgrey"));;
+                    Cell horizontalWall = new Cell(i - 1, j, tileSize * 2 + wallWidth, wallWidth, Paint.valueOf("sienna"));
+                    Cell verticalWall = new Cell(i, j - 1, wallWidth, tileSize * 2 + wallWidth, Paint.valueOf("sienna"));;
                     boardPane.add(cell, i ,j);
                     cell.setOnMouseClicked(event -> {
                         if (verticalWallWasClicked && model.canPlaceWall(((verticalWall.getxCoordinate() + 1) / 2),

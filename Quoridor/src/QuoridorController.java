@@ -30,14 +30,14 @@ public class QuoridorController {
     public void playerOnePawnClicked() {
         if (model.isPlayerOneTurn()) {
             model.clickPawnOne();
-            view.board.playerOne.changeColorToYellow();
+            view.board.playerOne.changeColor("seagreen");
         }
     }
 
     public void playerTwoPawnClicked() {
         if (!model.isPlayerOneTurn()) {
             model.clickPawnTwo();
-            view.board.playerTwo.changeColorToYellow();
+            view.board.playerTwo.changeColor("slateblue");
         }
     }
 
