@@ -17,9 +17,15 @@ public class QuoridorController {
             return;
         }
 
-        if (model.isPlayerOneTurn()) {
+        if (model.isPlayerOneTurn() && !model.pawnOneIsClicked()) {
             model.clickPawnOne();
             view.board.playerOne.changeColor("seagreen");
+        }
+        else {
+            model.unclickPawnOne();
+            view.board.playerOne.changeColorToStart();
+            model.unclickPawnTwo();
+            view.board.playerTwo.changeColorToStart();
         }
     }
 
@@ -28,9 +34,15 @@ public class QuoridorController {
             return;
         }
 
-        if (!model.isPlayerOneTurn()) {
+        if (!model.isPlayerOneTurn() && !model.pawnTwoIsClicked()) {
             model.clickPawnTwo();
-            view.board.playerTwo.changeColor("slateblue");
+            view.board.playerTwo.changeColor("seagreen");
+        }
+        else {
+            model.unclickPawnOne();
+            view.board.playerOne.changeColorToStart();
+            model.unclickPawnTwo();
+            view.board.playerTwo.changeColorToStart();
         }
     }
 
@@ -84,6 +96,7 @@ public class QuoridorController {
             view.board.setHorizontalWallWasClickedToTrue();
             view.board.setVerticalWallWasClickedToFalse();
             view.board.playerOne.changeColorToStart();
+            view.gameScene.setCursor(view.getHorizontalWallCursor());
         }
     }
 
@@ -96,6 +109,7 @@ public class QuoridorController {
             view.board.setHorizontalWallWasClickedToTrue();
             view.board.setVerticalWallWasClickedToFalse();
             view.board.playerTwo.changeColorToStart();
+            view.setCursorToHorizontalWall();
         }
     }
 
@@ -108,6 +122,7 @@ public class QuoridorController {
             view.board.setVerticalWallWasClickedToTrue();
             view.board.setHorizontalWallWasClickedToFalse();
             view.board.playerOne.changeColorToStart();
+            view.setCursorToVerticalWall();
         }
     }
 
@@ -120,6 +135,7 @@ public class QuoridorController {
             view.board.setVerticalWallWasClickedToTrue();
             view.board.setHorizontalWallWasClickedToFalse();
             view.board.playerTwo.changeColorToStart();
+            view.setCursorToVerticalWall();
         }
     }
 

@@ -1,9 +1,6 @@
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Circle;
 import javafx.scene.paint.Paint;
 
 /**
@@ -101,6 +98,7 @@ public class QuoridorBoard {
                             horizontalWallWasClicked = false;
                             model.endTurn();
                         }
+                        view.setCursorToNormal();
                     });
                 }
 

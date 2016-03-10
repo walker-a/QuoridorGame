@@ -3,9 +3,12 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
+import javafx.scene.ImageCursor;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -24,6 +27,9 @@ public class QuoridorGui extends Application {
     public GridPane playerOnePane;
     public GridPane playerTwoPane;
     public Label[][][] playerPaneLabels = new Label[2][5][2];
+    public Scene gameScene;
+    public ImageCursor horizontalWallCursor;
+    public ImageCursor verticalWallCursor;
 
     public QuoridorGui() {
     }
@@ -40,6 +46,8 @@ public class QuoridorGui extends Application {
      */
     @Override
     public void start(Stage primaryStage) {
+        setUpCursors();
+
         controller = new QuoridorController(this, model);
         BorderPane root = new BorderPane();
         Node boardPane = addBoard();
@@ -52,10 +60,32 @@ public class QuoridorGui extends Application {
         root.setLeft(playerOnePane);
         root.setRight(playerTwoPane);
 
-        Scene scene = new Scene(root, SCENE_WIDTH, SCENE_HEIGHT);
+        gameScene = new Scene(root, SCENE_WIDTH, SCENE_HEIGHT);
         primaryStage.setTitle("Quoridor Game");
-        primaryStage.setScene(scene);
+        primaryStage.setScene(gameScene);
         primaryStage.show();
+    }
+
+    private void setUpCursors() {
+        //Sets up the image cursors
+        int tileWidth = (int) (getSceneHeight() / 29 * 2.25);
+        int wallWidth = (int) (getSceneHeight() / 29 * 0.5);
+        Image horizontalWallImage = new Image("HorizontalWall.png", tileWidth * 2 + wallWidth, wallWidth, true, true);
+        Image verticalWallImage = new Image("VerticalWall.png", wallWidth, tileWidth * 2 + wallWidth, true, true);
+        horizontalWallCursor = new ImageCursor(horizontalWallImage, tileWidth + wallWidth / 2, wallWidth / 2);
+        verticalWallCursor = new ImageCursor(verticalWallImage, wallWidth / 2, tileWidth + wallWidth / 2);
+    }
+
+    public void setCursorToNormal() {
+        gameScene.setCursor(Cursor.DEFAULT);
+    }
+
+    public void setCursorToHorizontalWall() {
+        gameScene.setCursor(horizontalWallCursor);
+    }
+
+    public void setCursorToVerticalWall() {
+        gameScene.setCursor(verticalWallCursor);
     }
 
     /**
@@ -264,6 +294,14 @@ public class QuoridorGui extends Application {
 
     public int getSceneHeight() {
         return SCENE_HEIGHT;
+    }
+
+    public Cursor getHorizontalWallCursor() {
+        return horizontalWallCursor;
+    }
+
+    public Cursor getVerticalWallCursor() {
+        return verticalWallCursor;
     }
 
     public static void main(String[] args) {
