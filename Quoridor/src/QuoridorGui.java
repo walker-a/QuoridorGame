@@ -16,8 +16,8 @@ import javafx.stage.Stage;
  */
 public class QuoridorGui extends Application {
     public static final int MIN_BUTTON_WIDTH = 60;
-    public static final int SCENE_WIDTH = 1400;
-    public static final int SCENE_HEIGHT = 1000;
+    public static final int SCENE_HEIGHT = 700;
+    public static final int SCENE_WIDTH = (int) (1.4 * SCENE_HEIGHT);
     public QuoridorController controller;
     public QuoridorBoard board;
     public QuoridorModel model;
@@ -31,7 +31,7 @@ public class QuoridorGui extends Application {
     public void setSystems(QuoridorController quoridorController, QuoridorModel quoridorModel) {
         model = quoridorModel;
         controller = quoridorController;
-        board = new QuoridorBoard(controller, model);
+        board = new QuoridorBoard(controller, model, this);
     }
 
     /**
@@ -206,7 +206,7 @@ public class QuoridorGui extends Application {
     private Node addTitlePane() {
         GridPane titlePane = new GridPane();
         Label titleLabel = new Label("Quoridor");
-        titleLabel.setFont(new Font("Arial", 50));
+        titleLabel.setFont(new Font("Arial", SCENE_HEIGHT / 20));
         titleLabel.setPadding(new Insets(10, 10, 10, 10));
         titlePane.add(titleLabel, 0,  0);
         titlePane.setAlignment(Pos.CENTER);
@@ -256,6 +256,14 @@ public class QuoridorGui extends Application {
 
     public void playerTwoWins() {
         System.out.println("player Two Wins");
+    }
+
+    public int getSceneWidth() {
+        return SCENE_WIDTH;
+    }
+
+    public int getSceneHeight() {
+        return SCENE_HEIGHT;
     }
 
     public static void main(String[] args) {

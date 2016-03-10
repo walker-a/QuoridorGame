@@ -20,19 +20,23 @@ public class QuoridorBoard {
     Boolean horizontalWallWasClicked;
     Boolean verticalWallWasClicked;
     QuoridorModel model;
+    QuoridorGui view;
 
     /**
      * Instantiates the board as a new GridPane object with knowledge of the two pawns on the board
      */
-    public QuoridorBoard(QuoridorController controller, QuoridorModel model) {
+    public QuoridorBoard(QuoridorController controller, QuoridorModel model, QuoridorGui view) {
         this.controller = controller;
         this.model = model;
+        this.view = view;
         boardPane = new GridPane();
         boardPane.setHgap(0);
         boardPane.setVgap(0);
 
-        playerOne = new Pawn(8, 16, 30, "slategrey");
-        playerTwo = new Pawn(8, 0, 30, "seashell");
+        int pawnRadius = (int) (view.getSceneHeight() / 29);
+
+        playerOne = new Pawn(8, 16, pawnRadius, "slategrey");
+        playerTwo = new Pawn(8, 0, pawnRadius, "seashell");
 
         horizontalWallWasClicked = false;
         verticalWallWasClicked = false;
