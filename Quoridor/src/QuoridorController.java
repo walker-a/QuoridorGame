@@ -12,22 +12,11 @@ public class QuoridorController {
         this.view.setSystems(this, this.model);
     }
 
-    public void placeWallClicked() {
-    }
-
-    public void rotateWallClicked() {
-    }
-
-    public void movePawn() {
-    }
-
-    public void placeWall() {
-    }
-
-    public void rotateWall() {
-    }
-
     public void playerOnePawnClicked() {
+        if (model.gameIsOver()) {
+            return;
+        }
+
         if (model.isPlayerOneTurn()) {
             model.clickPawnOne();
             view.board.playerOne.changeColor("seagreen");
@@ -35,6 +24,10 @@ public class QuoridorController {
     }
 
     public void playerTwoPawnClicked() {
+        if (model.gameIsOver()) {
+            return;
+        }
+
         if (!model.isPlayerOneTurn()) {
             model.clickPawnTwo();
             view.board.playerTwo.changeColor("slateblue");
@@ -42,6 +35,10 @@ public class QuoridorController {
     }
 
     public void emptyCellClicked(QuoridorBoard.Cell cell) {
+        if (model.gameIsOver()) {
+            return;
+        }
+
         int xCoord = convertFromGridPaneCoord(cell.getxCoordinate());
         int yCoord = convertFromGridPaneCoord(cell.getyCoordinate());
         if (model.pawnOneIsClicked()) {
@@ -79,6 +76,10 @@ public class QuoridorController {
     }
 
     public void playerOneHorizontalWallButtonOnClick(){ //Hopefully these will call something in model rather than view.
+        if (model.gameIsOver()) {
+            return;
+        }
+
         if (model.isPlayerOneTurn()) {
             view.board.setHorizontalWallWasClickedToTrue();
             view.board.setVerticalWallWasClickedToFalse();
@@ -86,7 +87,11 @@ public class QuoridorController {
         }
     }
 
-    public void playerTwoHorizontalWallButtonOnClick(){ //Hopefully these will call something in model rather than view.
+    public void playerTwoHorizontalWallButtonOnClick() { //Hopefully these will call something in model rather than view.
+        if (model.gameIsOver()) {
+            return;
+        }
+
         if (!model.isPlayerOneTurn()) {
             view.board.setHorizontalWallWasClickedToTrue();
             view.board.setVerticalWallWasClickedToFalse();
@@ -94,7 +99,11 @@ public class QuoridorController {
         }
     }
 
-    public void playerOneVerticalWallButtonOnClick(){ //Hopefully these will call something in model rather than view.
+    public void playerOneVerticalWallButtonOnClick() { //Hopefully these will call something in model rather than view.
+        if (model.gameIsOver()) {
+            return;
+        }
+
         if (model.isPlayerOneTurn()) {
             view.board.setVerticalWallWasClickedToTrue();
             view.board.setHorizontalWallWasClickedToFalse();
@@ -102,11 +111,24 @@ public class QuoridorController {
         }
     }
 
-    public void playerTwoVerticalWallButtonOnClick(){ //Hopefully these will call something in model rather than view.
+    public void playerTwoVerticalWallButtonOnClick() { //Hopefully these will call something in model rather than view.
+        if (model.gameIsOver()) {
+            return;
+        }
+
         if (!model.isPlayerOneTurn()) {
             view.board.setVerticalWallWasClickedToTrue();
             view.board.setHorizontalWallWasClickedToFalse();
             view.board.playerTwo.changeColorToStart();
+        }
+    }
+
+    public void win() {
+        if (model.isPlayerOneTurn()) {
+            view.playerOneWins();
+        }
+        else {
+            view.playerTwoWins();
         }
     }
 

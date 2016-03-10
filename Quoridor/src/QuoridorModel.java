@@ -18,6 +18,7 @@ public class QuoridorModel {
     private QuoridorGui view;
     private int playerOneYGoal;
     private int playerTwoYGoal;
+    private boolean playerHasWon;
 
     public QuoridorModel(QuoridorController controller, QuoridorGui view) {
         this.controller = controller;
@@ -51,6 +52,7 @@ public class QuoridorModel {
         playerOneTurn = true;
         playerOneYGoal = 1;
         playerTwoYGoal = 9;
+        playerHasWon = false;
     }
 
     public void endTurn() {
@@ -300,8 +302,16 @@ public class QuoridorModel {
     public void updatePawnCoords(int xCoord, int yCoord) {
         if (playerOneTurn) {
             playerOnePawn.updateCoords(xCoord, yCoord);
+            if (playerOnePawn.getYCoord() == playerOneYGoal) {
+                controller.win();
+                playerHasWon = true;
+            }
         } else {
             playerTwoPawn.updateCoords(xCoord, yCoord);
+            if (playerTwoPawn.getYCoord() == playerTwoYGoal) {
+                controller.win();
+                playerHasWon = true;
+            }
         }
     }
 
@@ -359,6 +369,10 @@ public class QuoridorModel {
 
     public boolean pawnTwoIsClicked() {
         return pawnTwoClicked;
+    }
+
+    public boolean gameIsOver() {
+        return playerHasWon;
     }
 
 

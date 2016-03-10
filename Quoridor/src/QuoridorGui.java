@@ -250,6 +250,14 @@ public class QuoridorGui extends Application {
         return menuPane;
     }
 
+    public void playerOneWins() {
+        System.out.println("player one wins");
+    }
+
+    public void playerTwoWins() {
+        System.out.println("player Two Wins");
+    }
+
     public static void main(String[] args) {
         launch(args);
     }
