@@ -32,6 +32,7 @@ public class QuoridorGui extends Application {
     public ImageCursor verticalWallCursor;
     public boolean horizontalWallWasClicked = false;
     public boolean verticalWallWasClicked = false;
+    public Stage gameStage;
 
     public QuoridorGui() {
     }
@@ -44,13 +45,14 @@ public class QuoridorGui extends Application {
 
     /**
      * runs the GUI
-     * @param primaryStage
+     * @param stage
      */
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage stage) {
+        gameStage = stage;
         setUpCursors();
 
-        controller = new QuoridorController(this, model);
+        controller = new QuoridorController(this);
         BorderPane root = new BorderPane();
         Node boardPane = addBoard();
         Node menuAndTitlePane = addMenusAndTitles();
@@ -63,9 +65,9 @@ public class QuoridorGui extends Application {
         root.setRight(playerTwoPane);
 
         gameScene = new Scene(root, SCENE_WIDTH, SCENE_HEIGHT);
-        primaryStage.setTitle("Quoridor Game");
-        primaryStage.setScene(gameScene);
-        primaryStage.show();
+        gameStage.setTitle("Quoridor Game");
+        gameStage.setScene(gameScene);
+        gameStage.show();
     }
 
     private void setUpCursors() {
@@ -278,7 +280,11 @@ public class QuoridorGui extends Application {
         MenuItem newGame = new MenuItem("New Game");
         newGame.setOnAction(new EventHandler<ActionEvent>() {
             @Override
-            public void handle(ActionEvent event) {}
+            public void handle(ActionEvent event) {
+                gameStage.close();
+                Stage stage = new Stage();
+                start(stage);
+            }
         });
         fileMenu.getItems().addAll(newGame);
 
