@@ -263,29 +263,47 @@ public class QuoridorGui extends Application {
         MenuBar menuBar = new MenuBar();
         menuBar.setMinWidth(SCENE_WIDTH);
 
+        menuBar.setOnMouseEntered(event -> {
+            setCursorToNormal();
+        });
+        menuBar.setOnMouseExited(event -> {
+            if (getHorizontalWallWasClicked()) {
+                setCursorToHorizontalWall();
+            }
+            else if (getVerticalWallWasClicked()) {
+                setCursorToVerticalWall();
+            }
+        });
+
         Menu gameMenu = new Menu("Quoridor");
+
         MenuItem rules = new MenuItem("Rules");
         rules.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {}
         });
+
         MenuItem quit = new MenuItem("Quit");
         quit.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {System.exit(0);}
         });
+
         gameMenu.getItems().addAll(rules, quit);
 
         Menu fileMenu = new Menu("File");
+
         MenuItem newGame = new MenuItem("New Game");
         newGame.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 gameStage.close();
                 Stage stage = new Stage();
+                controller.resetTurn();
                 start(stage);
             }
         });
+
         fileMenu.getItems().addAll(newGame);
 
         menuBar.getMenus().addAll(gameMenu, fileMenu);

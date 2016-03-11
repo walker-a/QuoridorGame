@@ -124,11 +124,38 @@ public class QuoridorBoard {
         boardPane.add(playerTwo.getGraphicsNode(), playerTwo.getXCoord(), playerTwo.getYCoord());
         playerOne.getGraphicsNode().setOnMouseClicked(event -> {
             controller.playerOnePawnClicked();
-
         });
+        playerOne.getGraphicsNode().setOnMouseEntered(event -> {
+            if (model.isPlayerOneTurn()) {
+                view.setCursorToNormal();
+            }
+        });
+        playerOne.getGraphicsNode().setOnMouseExited(event -> {
+            if (view.getHorizontalWallWasClicked()) {
+                view.setCursorToHorizontalWall();
+            }
+            else if (view.getVerticalWallWasClicked()) {
+                view.setCursorToVerticalWall();
+            }
+        });
+
         playerTwo.getGraphicsNode().setOnMouseClicked(event -> {
             controller.playerTwoPawnClicked();
         });
+        playerTwo.getGraphicsNode().setOnMouseEntered(event -> {
+            if (!model.isPlayerOneTurn()) {
+                view.setCursorToNormal();
+            }
+        });
+        playerTwo.getGraphicsNode().setOnMouseExited(event -> {
+            if (view.getHorizontalWallWasClicked()) {
+                view.setCursorToHorizontalWall();
+            }
+            else if (view.getVerticalWallWasClicked()) {
+                view.setCursorToVerticalWall();
+            }
+        });
+
 
         boardPane.setHalignment(playerOne.getGraphicsNode(), HPos.CENTER);
         boardPane.setHalignment(playerTwo.getGraphicsNode(), HPos.CENTER);
