@@ -19,7 +19,7 @@ public class QuoridorController {
 
         if (model.isPlayerOneTurn() && !model.pawnOneIsClicked()) {
             model.clickPawnOne();
-            view.board.playerOne.changeColor("seagreen");
+            view.board.playerOne.changeColor("slateblue");
         }
         else {
             model.unclickPawnOne();
