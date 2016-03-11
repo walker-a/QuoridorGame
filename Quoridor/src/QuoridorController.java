@@ -6,7 +6,7 @@ public class QuoridorController {
     QuoridorGui view;
 
 
-    public QuoridorController(QuoridorGui view, QuoridorModel model) {
+    public QuoridorController(QuoridorGui view) {
         this.view = view;
         this.model = new QuoridorModel(this, view);
         this.view.setSystems(this, this.model);
