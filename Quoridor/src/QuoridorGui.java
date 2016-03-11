@@ -45,6 +45,8 @@ public class QuoridorGui extends Application {
     public final int menuWidth = (int) (menuHeight * 1.4);
     public final int rulesHeight = 700;
     public final int rulesWidth = (int) (700 * 1.4);
+    public final int winStateHeight = 400;
+    public final int winStateWidth = (int) (winStateHeight * 1.4);
 
     public QuoridorGui() {
     }
@@ -143,10 +145,9 @@ public class QuoridorGui extends Application {
     public Node addRulesStageButtons() {
         GridPane rulesButtons = new GridPane();
 
-        Button mainMenuButton = new Button("MainMenu");
+        Button mainMenuButton = new Button("Main Menu");
         mainMenuButton.setOnMouseClicked(event -> {
-            hideRulesStage();
-            showMainMenuStage();
+            goToMainMenu();
         });
         mainMenuButton.setMinWidth(MIN_BUTTON_WIDTH);
         rulesButtons.add(mainMenuButton, 0, 0);
@@ -216,6 +217,10 @@ public class QuoridorGui extends Application {
 
     public void showGameStage() {
         gameStage.show();
+    }
+
+    public void hideGameStage() {
+        gameStage.hide();
     }
 
     /**
@@ -456,27 +461,95 @@ public class QuoridorGui extends Application {
     }
 
     public void newGame() {
-        gameStage.close();
-        Stage stage = new Stage();
-        restartOnNewGame(stage);
+        restartOnNewGame();
         showGameStage();
     }
 
-    public void restartOnNewGame(Stage stage) {
-        controller.resetTurn();
+    public void restartOnNewGame() {
+        gameStage.close();
         controller = new QuoridorController(this);
         setSystems(controller, controller.getModel());
-
-        gameStage = stage;
+        gameStage = new Stage();
         setUpGameStage();
     }
 
+    public void goToMainMenu() {
+        try {
+            gameStage.close();
+        } catch (Exception e) {}
+        try {
+            rulesStage.close();
+        } catch (Exception e) {}
+        try {
+            winStateStage.close();
+        } catch (Exception e) {}
+        try {
+            mainMenuStage.close();
+        } catch (Exception e) {}
+        start(new Stage());
+    }
+
     public void playerOneWins() {
-        System.out.println("player one wins");
+        setUpWinStateStage("Player One");
+        showWinStateStage();
     }
 
     public void playerTwoWins() {
-        System.out.println("player Two Wins");
+        setUpWinStateStage("Player Two");
+        showWinStateStage();
+    }
+
+    public void setUpWinStateStage(String playerName) {
+        winStateStage = new Stage();
+
+        BorderPane root = new BorderPane();
+        Node buttonsPane = addWinStateStageButtons();
+        Node centerPane = addWinStateStageGraphic(playerName);
+        root.setBottom(buttonsPane);
+        root.setCenter(centerPane);
+
+        winStateScene = new Scene(root, winStateWidth, winStateHeight);
+
+        winStateStage.setScene(winStateScene);
+        winStateStage.setResizable(false);
+        winStateStage.setTitle(playerName + " Wins");
+    }
+
+    public Node addWinStateStageButtons() {
+        GridPane winStateButtons = new GridPane();
+
+        Button newGameButton = new Button("New Game");
+        newGameButton.setOnMouseClicked(event -> {
+            hideWinStateStage();
+            newGame();
+        });
+        newGameButton.setMinWidth(MIN_BUTTON_WIDTH);
+        winStateButtons.add(newGameButton, 0, 0);
+
+        Button mainMenuButton = new Button("Main Menu");
+        mainMenuButton.setOnMouseClicked(event -> {
+            goToMainMenu();
+        });
+        mainMenuButton.setMinWidth(MIN_BUTTON_WIDTH);
+        winStateButtons.add(mainMenuButton, 1, 0);
+
+        winStateButtons.setAlignment(Pos.CENTER);
+
+        return winStateButtons;
+    }
+
+    public Node addWinStateStageGraphic(String playerName) {
+        Label winStateGraphic = new Label(playerName + " wins!!!");
+        winStateGraphic.setAlignment(Pos.CENTER);
+        return winStateGraphic;
+    }
+
+    public void showWinStateStage() {
+        winStateStage.show();
+    }
+
+    public void hideWinStateStage() {
+        winStateStage.hide();
     }
 
     public int getSceneWidth() {
