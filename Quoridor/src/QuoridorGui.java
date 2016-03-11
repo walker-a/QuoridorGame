@@ -9,6 +9,8 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -65,9 +67,18 @@ public class QuoridorGui extends Application {
         root.setRight(playerTwoPane);
 
         gameScene = new Scene(root, SCENE_WIDTH, SCENE_HEIGHT);
+
         gameStage.setTitle("Quoridor Game");
         gameStage.setScene(gameScene);
         gameStage.show();
+
+        gameScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            public void handle(KeyEvent key) {
+                if (key.getCode() == KeyCode.ESCAPE) {
+                   controller.resetTurn();
+                }
+            };
+        });
     }
 
     private void setUpCursors() {
@@ -263,21 +274,17 @@ public class QuoridorGui extends Application {
         MenuBar menuBar = new MenuBar();
         menuBar.setMinWidth(SCENE_WIDTH);
 
-        menuBar.setOnMouseEntered(event -> {
+        menuPane.setOnMouseEntered(event -> {
             setCursorToNormal();
         });
-        menuBar.setOnMouseExited(event -> {
-            if (getHorizontalWallWasClicked()) {
-                setCursorToHorizontalWall();
-            }
-            else if (getVerticalWallWasClicked()) {
-                setCursorToVerticalWall();
-            }
+        menuPane.setOnMouseExited(event -> {
+            setCursorToCorrect();
         });
 
         Menu gameMenu = new Menu("Quoridor");
 
         MenuItem rules = new MenuItem("Rules");
+
         rules.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {}
@@ -370,6 +377,17 @@ public class QuoridorGui extends Application {
      */
     public void setVerticalWallWasClickedToFalse() {
         verticalWallWasClicked = false;
+    }
+
+    public void setCursorToCorrect() {
+        if (getHorizontalWallWasClicked()) {
+            setCursorToHorizontalWall();
+        }
+        else if (getVerticalWallWasClicked()) {
+            setCursorToVerticalWall();
+        } else {
+            setCursorToNormal();
+        }
     }
 
     public static void main(String[] args) {
