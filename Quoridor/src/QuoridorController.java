@@ -9,7 +9,6 @@ public class QuoridorController {
     public QuoridorController(QuoridorGui view) {
         this.view = view;
         this.model = new QuoridorModel(this, view);
-        this.view.setSystems(this, this.model);
     }
 
     public void playerOnePawnClicked() {
@@ -171,5 +170,13 @@ public class QuoridorController {
 
     public static int convertFromGridPaneCoord(int gridPaneCoord) {
         return gridPaneCoord / 2 + 1;
+    }
+
+    public QuoridorModel getModel() {
+        return model;
+    }
+
+    public QuoridorGui getView() {
+        return view;
     }
 }

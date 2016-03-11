@@ -30,11 +30,19 @@ public class QuoridorGui extends Application {
     public GridPane playerTwoPane;
     public Label[][][] playerPaneLabels = new Label[2][5][2];
     public Scene gameScene;
+    public Stage gameStage;
     public ImageCursor horizontalWallCursor;
     public ImageCursor verticalWallCursor;
     public boolean horizontalWallWasClicked = false;
     public boolean verticalWallWasClicked = false;
-    public Stage gameStage;
+    public Stage mainMenuStage;
+    public Scene mainMenuScene;
+    public Stage winStateStage;
+    public Scene winStateScene;
+    public Stage rulesStage;
+    public Scene rulesScene;
+    public final int menuHeight = 400;
+    public final int menuWidth = (int) (menuHeight * 1.4);
 
     public QuoridorGui() {
     }
@@ -51,10 +59,70 @@ public class QuoridorGui extends Application {
      */
     @Override
     public void start(Stage stage) {
+        controller = new QuoridorController(this);
+        setSystems(controller, controller.getModel());
+
         gameStage = stage;
         setUpCursors();
+        setUpMainMenuStage();
+        showMainMenu();
 
-        controller = new QuoridorController(this);
+        setUpGameStage();
+    }
+
+    public void setUpMainMenuStage() {
+        mainMenuStage = new Stage();
+
+        BorderPane root = new BorderPane();
+        Node bottomPane = addMenuButtons();
+        Node centerPane = addMenuGraphic();
+        root.setBottom(bottomPane);
+        root.setCenter(centerPane);
+
+        mainMenuScene = new Scene(root, menuWidth, menuHeight);
+
+        mainMenuStage.setScene(mainMenuScene);
+        mainMenuStage.setResizable(false);
+        mainMenuStage.setTitle("Main Menu");
+    }
+
+    public Node addMenuButtons() {
+        GridPane menuButtons = new GridPane();
+
+        Button rulesButton = new Button("Rules");
+        rulesButton.setOnMouseClicked(event -> {
+            //showRulesStage();
+        });
+        rulesButton.setMinWidth(MIN_BUTTON_WIDTH);
+        menuButtons.add(rulesButton, 0, 0);
+
+        Button startGameButton = new Button("Start");
+        startGameButton.setOnMouseClicked(event -> {
+            hideMainMenu();
+            showGameStage();
+        });
+        startGameButton.setMinWidth(MIN_BUTTON_WIDTH);
+        menuButtons.add(startGameButton, 1, 0);
+
+        menuButtons.setAlignment(Pos.CENTER);
+
+        return menuButtons;
+    }
+
+    public Node addMenuGraphic() {
+        Node menuGraphic = new Label();
+        return menuGraphic;
+    }
+
+    public void showMainMenu() {
+        mainMenuStage.show();
+    }
+
+    public void hideMainMenu() {
+        mainMenuStage.hide();
+    }
+
+    public void setUpGameStage() {
         BorderPane root = new BorderPane();
         Node boardPane = addBoard();
         Node menuAndTitlePane = addMenusAndTitles();
@@ -80,7 +148,7 @@ public class QuoridorGui extends Application {
 
         gameStage.setTitle("Quoridor Game");
         gameStage.setScene(gameScene);
-        gameStage.show();
+        gameStage.setResizable(false);
 
         gameScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             public void handle(KeyEvent key) {
@@ -89,6 +157,10 @@ public class QuoridorGui extends Application {
                 }
             };
         });
+    }
+
+    public void showGameStage() {
+        gameStage.show();
     }
 
     private void setUpCursors() {
@@ -310,23 +382,27 @@ public class QuoridorGui extends Application {
 
         Menu fileMenu = new Menu("File");
 
-        MenuItem newGame = new MenuItem("New Game");
-        newGame.setOnAction(new EventHandler<ActionEvent>() {
+        MenuItem newGameMenuItem = new MenuItem("New Game");
+        newGameMenuItem.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                gameStage.close();
-                Stage stage = new Stage();
-                controller.resetTurn();
-                start(stage);
+                newGame();
             }
         });
 
-        fileMenu.getItems().addAll(newGame);
+        fileMenu.getItems().addAll(newGameMenuItem);
 
         menuBar.getMenus().addAll(gameMenu, fileMenu);
         menuPane.getChildren().add(menuBar);
 
         return menuPane;
+    }
+
+    public void newGame() {
+        gameStage.close();
+        Stage stage = new Stage();
+        controller.resetTurn();
+        start(stage);
     }
 
     public void playerOneWins() {
