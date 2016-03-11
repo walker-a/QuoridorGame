@@ -43,6 +43,8 @@ public class QuoridorGui extends Application {
     public Scene rulesScene;
     public final int menuHeight = 400;
     public final int menuWidth = (int) (menuHeight * 1.4);
+    public final int rulesHeight = 700;
+    public final int rulesWidth = (int) (700 * 1.4);
 
     public QuoridorGui() {
     }
@@ -65,9 +67,9 @@ public class QuoridorGui extends Application {
         gameStage = stage;
         setUpCursors();
         setUpMainMenuStage();
-        showMainMenu();
-
+        showMainMenuStage();
         setUpGameStage();
+        setUpRulesStage();
     }
 
     public void setUpMainMenuStage() {
@@ -91,14 +93,14 @@ public class QuoridorGui extends Application {
 
         Button rulesButton = new Button("Rules");
         rulesButton.setOnMouseClicked(event -> {
-            //showRulesStage();
+            showRulesStage();
         });
         rulesButton.setMinWidth(MIN_BUTTON_WIDTH);
         menuButtons.add(rulesButton, 0, 0);
 
         Button startGameButton = new Button("Start");
         startGameButton.setOnMouseClicked(event -> {
-            hideMainMenu();
+            hideMainMenuStage();
             showGameStage();
         });
         startGameButton.setMinWidth(MIN_BUTTON_WIDTH);
@@ -114,12 +116,65 @@ public class QuoridorGui extends Application {
         return menuGraphic;
     }
 
-    public void showMainMenu() {
+    public void showMainMenuStage() {
         mainMenuStage.show();
     }
 
-    public void hideMainMenu() {
+    public void hideMainMenuStage() {
         mainMenuStage.hide();
+    }
+
+    public void setUpRulesStage() {
+        rulesStage = new Stage();
+
+        BorderPane root = new BorderPane();
+        Node buttonsPane = addRulesStageButtons();
+        Node centerPane = addRulesGraphic();
+        root.setBottom(buttonsPane);
+        root.setCenter(centerPane);
+
+        rulesScene = new Scene(root, rulesWidth, rulesHeight);
+
+        rulesStage.setScene(rulesScene);
+        rulesStage.setResizable(false);
+        rulesStage.setTitle("Rules");
+    }
+
+    public Node addRulesStageButtons() {
+        GridPane rulesButtons = new GridPane();
+
+        Button mainMenuButton = new Button("MainMenu");
+        mainMenuButton.setOnMouseClicked(event -> {
+            hideRulesStage();
+            showMainMenuStage();
+        });
+        mainMenuButton.setMinWidth(MIN_BUTTON_WIDTH);
+        rulesButtons.add(mainMenuButton, 0, 0);
+
+        Button startGameButton = new Button("Start Game");
+        startGameButton.setOnMouseClicked(event -> {
+            hideMainMenuStage();
+            hideRulesStage();
+            showGameStage();
+        });
+        startGameButton.setMinWidth(MIN_BUTTON_WIDTH);
+        rulesButtons.add(startGameButton, 1, 0);
+
+        rulesButtons.setAlignment(Pos.CENTER);
+
+        return rulesButtons;
+    }
+    public Node addRulesGraphic() {
+        Label rulesGraphic = new Label();
+        return new Label();
+    }
+
+    public void showRulesStage() {
+        rulesStage.show();
+    }
+
+    public void hideRulesStage() {
+        rulesStage.hide();
     }
 
     public void setUpGameStage() {
@@ -161,28 +216,6 @@ public class QuoridorGui extends Application {
 
     public void showGameStage() {
         gameStage.show();
-    }
-
-    private void setUpCursors() {
-        //Sets up the image cursors
-        int tileWidth = (int) (getSceneHeight() / 29 * 2.25);
-        int wallWidth = (int) (getSceneHeight() / 29 * 0.5);
-        Image horizontalWallImage = new Image("HorizontalWall.png", tileWidth * 2 + wallWidth, wallWidth, true, true);
-        Image verticalWallImage = new Image("VerticalWall.png", wallWidth, tileWidth * 2 + wallWidth, true, true);
-        horizontalWallCursor = new ImageCursor(horizontalWallImage, tileWidth + wallWidth / 2, wallWidth / 2);
-        verticalWallCursor = new ImageCursor(verticalWallImage, wallWidth / 2, tileWidth + wallWidth / 2);
-    }
-
-    public void setCursorToNormal() {
-        gameScene.setCursor(Cursor.DEFAULT);
-    }
-
-    public void setCursorToHorizontalWall() {
-        gameScene.setCursor(horizontalWallCursor);
-    }
-
-    public void setCursorToVerticalWall() {
-        gameScene.setCursor(verticalWallCursor);
     }
 
     /**
@@ -369,7 +402,9 @@ public class QuoridorGui extends Application {
 
         rules.setOnAction(new EventHandler<ActionEvent>() {
             @Override
-            public void handle(ActionEvent event) {}
+            public void handle(ActionEvent event) {
+                showRulesStage();
+            }
         });
 
         MenuItem quit = new MenuItem("Quit");
@@ -398,11 +433,42 @@ public class QuoridorGui extends Application {
         return menuPane;
     }
 
+    private void setUpCursors() {
+        //Sets up the image cursors
+        int tileWidth = (int) (getSceneHeight() / 29 * 2.25);
+        int wallWidth = (int) (getSceneHeight() / 29 * 0.5);
+        Image horizontalWallImage = new Image("HorizontalWall.png", tileWidth * 2 + wallWidth, wallWidth, true, true);
+        Image verticalWallImage = new Image("VerticalWall.png", wallWidth, tileWidth * 2 + wallWidth, true, true);
+        horizontalWallCursor = new ImageCursor(horizontalWallImage, tileWidth + wallWidth / 2, wallWidth / 2);
+        verticalWallCursor = new ImageCursor(verticalWallImage, wallWidth / 2, tileWidth + wallWidth / 2);
+    }
+
+    public void setCursorToNormal() {
+        gameScene.setCursor(Cursor.DEFAULT);
+    }
+
+    public void setCursorToHorizontalWall() {
+        gameScene.setCursor(horizontalWallCursor);
+    }
+
+    public void setCursorToVerticalWall() {
+        gameScene.setCursor(verticalWallCursor);
+    }
+
     public void newGame() {
         gameStage.close();
         Stage stage = new Stage();
+        restartOnNewGame(stage);
+        showGameStage();
+    }
+
+    public void restartOnNewGame(Stage stage) {
         controller.resetTurn();
-        start(stage);
+        controller = new QuoridorController(this);
+        setSystems(controller, controller.getModel());
+
+        gameStage = stage;
+        setUpGameStage();
     }
 
     public void playerOneWins() {
