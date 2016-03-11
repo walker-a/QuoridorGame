@@ -63,7 +63,7 @@ public class QuoridorModel {
         }
         unclickPawnOne();
         unclickPawnTwo();
-        view.updateTurn();
+        view.updateLabels(getPlayerOneWallCount(), getPlayerTwoWallCount());
     }
 
     public boolean canPlaceWall(int xCoord, int yCoord, boolean vertical) {
@@ -154,10 +154,9 @@ public class QuoridorModel {
     public void wallPlaced() {
         if (isPlayerOneTurn() && playerOneWallCount > 0) {
             playerOneWallCount--;
-            view.updatePlayerOneWallCount(playerOneWallCount);
-        } else if (playerTwoWallCount > 0){
+
+        } else if (playerTwoWallCount > 0) {
             playerTwoWallCount--;
-            view.updatePlayerTwoWallCount(playerTwoWallCount);
         }
     }
 
@@ -344,7 +343,7 @@ public class QuoridorModel {
     }
 
     public int getPlayerTwoWallCount() {
-        return playerOneWallCount;
+        return playerTwoWallCount;
     }
 
     public void clickPawnOne() {

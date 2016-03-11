@@ -84,7 +84,7 @@ public class QuoridorController {
             return;
         }
 
-        if (model.isPlayerOneTurn() && !view.getHorizontalWallWasClicked()) {
+        if (model.isPlayerOneTurn() && !view.getHorizontalWallWasClicked() && model.getPlayerOneWallCount() > 0) {
             view.setHorizontalWallWasClickedToTrue();
             view.setVerticalWallWasClickedToFalse();
             view.gameScene.setCursor(view.getHorizontalWallCursor());
@@ -98,7 +98,7 @@ public class QuoridorController {
             return;
         }
 
-        if (!model.isPlayerOneTurn() && !view.getHorizontalWallWasClicked()) {
+        if (!model.isPlayerOneTurn() && !view.getHorizontalWallWasClicked() && model.getPlayerTwoWallCount() > 0) {
             view.setHorizontalWallWasClickedToTrue();
             view.setVerticalWallWasClickedToFalse();
             view.board.playerTwo.changeColorToStart();
@@ -113,7 +113,7 @@ public class QuoridorController {
             return;
         }
 
-        if (model.isPlayerOneTurn() && !view.getVerticalWallWasClicked()) {
+        if (model.isPlayerOneTurn() && !view.getVerticalWallWasClicked() && model.getPlayerOneWallCount() > 0) {
             view.setVerticalWallWasClickedToTrue();
             view.setHorizontalWallWasClickedToFalse();
             view.board.playerOne.changeColorToStart();
@@ -128,7 +128,7 @@ public class QuoridorController {
             return;
         }
 
-        if (!model.isPlayerOneTurn() && !view.getVerticalWallWasClicked()) {
+        if (!model.isPlayerOneTurn() && !view.getVerticalWallWasClicked() && model.getPlayerTwoWallCount() > 0) {
             view.setVerticalWallWasClickedToTrue();
             view.setHorizontalWallWasClickedToFalse();
             view.board.playerTwo.changeColorToStart();

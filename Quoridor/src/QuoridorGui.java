@@ -113,7 +113,7 @@ public class QuoridorGui extends Application {
         placeVerticalWallButton.setOnMouseClicked(event -> {
             controller.playerOneVerticalWallButtonOnClick();
         });
-        Label playerOneWallCount = new Label("Wall Count: 10");
+        Label playerOneWallCount = new Label("Wall Count: " + model.getPlayerOneWallCount());
         Label playerOneTurnLabel = new Label("Turn: ****");
 
         placeHorizontalWallButton.setMinWidth(MIN_BUTTON_WIDTH);
@@ -155,7 +155,7 @@ public class QuoridorGui extends Application {
         placeVerticalWallButton.setOnMouseClicked(event -> {
             controller.playerTwoVerticalWallButtonOnClick();
         });
-        Label playerTwoWallCount = new Label("Wall Count: 10");
+        Label playerTwoWallCount = new Label("Wall Count: " + model.getPlayerTwoWallCount());
 
         Label playerTwoTurnLabel = new Label("Turn:    ");
 
@@ -189,7 +189,7 @@ public class QuoridorGui extends Application {
         playerPaneLabels[0][3][1] = playerTwoWallCount;
     }
 
-    public void updateTurn() {
+    public void updateTurnLabels() {
         Label playerOneTurnLabel;
         Label playerTwoTurnLabel;
         if (model.isPlayerOneTurn()) {
@@ -205,6 +205,12 @@ public class QuoridorGui extends Application {
         playerTwoPane.add(playerTwoTurnLabel, 0, 4);
         playerPaneLabels[0][4][0] = playerOneTurnLabel;
         playerPaneLabels[0][4][1] = playerTwoTurnLabel;
+    }
+
+    public void updateLabels(int playerOneCount, int playerTwoCount) {
+        updateTurnLabels();
+        updatePlayerOneWallCount(playerOneCount);
+        updatePlayerTwoWallCount(playerTwoCount);
     }
 
     /**
