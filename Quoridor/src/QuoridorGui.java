@@ -30,6 +30,8 @@ public class QuoridorGui extends Application {
     public Scene gameScene;
     public ImageCursor horizontalWallCursor;
     public ImageCursor verticalWallCursor;
+    public boolean horizontalWallWasClicked = false;
+    public boolean verticalWallWasClicked = false;
 
     public QuoridorGui() {
     }
@@ -302,6 +304,42 @@ public class QuoridorGui extends Application {
 
     public Cursor getVerticalWallCursor() {
         return verticalWallCursor;
+    }
+
+    public boolean getVerticalWallWasClicked() {
+        return verticalWallWasClicked;
+    }
+
+    public boolean getHorizontalWallWasClicked() {
+        return horizontalWallWasClicked;
+    }
+
+    /**
+     * Sets the state that the next click of mouse triggers a new horizontal wall
+     */
+    public void setHorizontalWallWasClickedToTrue() {
+        horizontalWallWasClicked = true;
+    }
+
+    /**
+     * changes the state of horizontalWallWasClicked to false
+     */
+    public void setHorizontalWallWasClickedToFalse() {
+        horizontalWallWasClicked = false;
+    }
+
+    /**
+     * Sets the state that the next click of mouse triggers a new vertical wall
+     */
+    public void setVerticalWallWasClickedToTrue() {
+        verticalWallWasClicked = true;
+    }
+
+    /**
+     * changes the state of verticalWallWasClicked to false
+     */
+    public void setVerticalWallWasClickedToFalse() {
+        verticalWallWasClicked = false;
     }
 
     public static void main(String[] args) {

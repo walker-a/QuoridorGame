@@ -20,12 +20,11 @@ public class QuoridorController {
         if (model.isPlayerOneTurn() && !model.pawnOneIsClicked()) {
             model.clickPawnOne();
             view.board.playerOne.changeColor("slateblue");
+            view.setCursorToNormal();
+            resetWalls();
         }
         else {
-            model.unclickPawnOne();
-            view.board.playerOne.changeColorToStart();
-            model.unclickPawnTwo();
-            view.board.playerTwo.changeColorToStart();
+            resetTurn();
         }
     }
 
@@ -37,12 +36,11 @@ public class QuoridorController {
         if (!model.isPlayerOneTurn() && !model.pawnTwoIsClicked()) {
             model.clickPawnTwo();
             view.board.playerTwo.changeColor("seagreen");
+            view.setCursorToNormal();
+            resetWalls();
         }
         else {
-            model.unclickPawnOne();
-            view.board.playerOne.changeColorToStart();
-            model.unclickPawnTwo();
-            view.board.playerTwo.changeColorToStart();
+            resetTurn();
         }
     }
 
@@ -53,6 +51,7 @@ public class QuoridorController {
 
         int xCoord = convertFromGridPaneCoord(cell.getxCoordinate());
         int yCoord = convertFromGridPaneCoord(cell.getyCoordinate());
+
         if (model.pawnOneIsClicked()) {
 
             if (model.pawnCanMoveTo(xCoord, yCoord)) {
@@ -61,13 +60,9 @@ public class QuoridorController {
                 model.updatePawnCoords(xCoord, yCoord);
                 model.endTurn();
             }
-            else {
-                model.unclickPawnOne();
-            }
 
             view.board.boardPane.setRowIndex(view.board.playerOne.getGraphicsNode(), view.board.playerOne.getYCoord());
             view.board.boardPane.setColumnIndex(view.board.playerOne.getGraphicsNode(), view.board.playerOne.getXCoord());
-            view.board.playerOne.changeColorToStart();
 
         } else if (model.pawnTwoIsClicked()) {
 
@@ -77,14 +72,11 @@ public class QuoridorController {
                 model.updatePawnCoords(xCoord, yCoord);
                 model.endTurn();
             }
-            else {
-                model.unclickPawnTwo();
-            }
 
             view.board.boardPane.setRowIndex(view.board.playerTwo.getGraphicsNode(), view.board.playerTwo.getYCoord());
             view.board.boardPane.setColumnIndex(view.board.playerTwo.getGraphicsNode(), view.board.playerTwo.getXCoord());
-            view.board.playerTwo.changeColorToStart();
         }
+        resetTurn();
     }
 
     public void playerOneHorizontalWallButtonOnClick(){ //Hopefully these will call something in model rather than view.
@@ -92,11 +84,12 @@ public class QuoridorController {
             return;
         }
 
-        if (model.isPlayerOneTurn()) {
-            view.board.setHorizontalWallWasClickedToTrue();
-            view.board.setVerticalWallWasClickedToFalse();
-            view.board.playerOne.changeColorToStart();
+        if (model.isPlayerOneTurn() && !view.getHorizontalWallWasClicked()) {
+            view.setHorizontalWallWasClickedToTrue();
+            view.setVerticalWallWasClickedToFalse();
             view.gameScene.setCursor(view.getHorizontalWallCursor());
+        } else {
+            resetTurn();
         }
     }
 
@@ -105,11 +98,13 @@ public class QuoridorController {
             return;
         }
 
-        if (!model.isPlayerOneTurn()) {
-            view.board.setHorizontalWallWasClickedToTrue();
-            view.board.setVerticalWallWasClickedToFalse();
+        if (!model.isPlayerOneTurn() && !view.getHorizontalWallWasClicked()) {
+            view.setHorizontalWallWasClickedToTrue();
+            view.setVerticalWallWasClickedToFalse();
             view.board.playerTwo.changeColorToStart();
             view.setCursorToHorizontalWall();
+        } else {
+            resetTurn();
         }
     }
 
@@ -118,11 +113,13 @@ public class QuoridorController {
             return;
         }
 
-        if (model.isPlayerOneTurn()) {
-            view.board.setVerticalWallWasClickedToTrue();
-            view.board.setHorizontalWallWasClickedToFalse();
+        if (model.isPlayerOneTurn() && !view.getVerticalWallWasClicked()) {
+            view.setVerticalWallWasClickedToTrue();
+            view.setHorizontalWallWasClickedToFalse();
             view.board.playerOne.changeColorToStart();
             view.setCursorToVerticalWall();
+        } else {
+            resetTurn();
         }
     }
 
@@ -131,11 +128,13 @@ public class QuoridorController {
             return;
         }
 
-        if (!model.isPlayerOneTurn()) {
-            view.board.setVerticalWallWasClickedToTrue();
-            view.board.setHorizontalWallWasClickedToFalse();
+        if (!model.isPlayerOneTurn() && !view.getVerticalWallWasClicked()) {
+            view.setVerticalWallWasClickedToTrue();
+            view.setHorizontalWallWasClickedToFalse();
             view.board.playerTwo.changeColorToStart();
             view.setCursorToVerticalWall();
+        } else {
+            resetTurn();
         }
     }
 
@@ -146,6 +145,21 @@ public class QuoridorController {
         else {
             view.playerTwoWins();
         }
+    }
+
+    public void resetTurn() {
+        view.setCursorToNormal();
+        view.setHorizontalWallWasClickedToFalse();
+        view.setVerticalWallWasClickedToFalse();
+        model.unclickPawnOne();
+        model.unclickPawnTwo();
+        view.board.playerOne.changeColorToStart();
+        view.board.playerTwo.changeColorToStart();
+    }
+
+    public void resetWalls() {
+        view.setHorizontalWallWasClickedToFalse();
+        view.setVerticalWallWasClickedToFalse();
     }
 
     public static int convertFromGridPaneCoord(int gridPaneCoord) {

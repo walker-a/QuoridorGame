@@ -14,8 +14,6 @@ public class QuoridorBoard {
     Pawn playerOne;
     Pawn playerTwo;
     Pawn wasJustClicked;
-    Boolean horizontalWallWasClicked;
-    Boolean verticalWallWasClicked;
     QuoridorModel model;
     QuoridorGui view;
 
@@ -34,9 +32,6 @@ public class QuoridorBoard {
 
         playerOne = new Pawn(8, 16, pawnRadius, "slategrey");
         playerTwo = new Pawn(8, 0, pawnRadius, "seashell");
-
-        horizontalWallWasClicked = false;
-        verticalWallWasClicked = false;
 
         setUpBoard();
     }
@@ -79,36 +74,41 @@ public class QuoridorBoard {
                 if (i%2==1 && j%2==1) {
                     Cell cell = new Cell(i, j, wallWidth, wallWidth, Paint.valueOf("white"));
                     Cell horizontalWall = new Cell(i - 1, j, tileSize * 2 + wallWidth, wallWidth, Paint.valueOf("sienna"));
+                    horizontalWall.setOnMouseClicked(event -> {controller.resetTurn();});
                     Cell verticalWall = new Cell(i, j - 1, wallWidth, tileSize * 2 + wallWidth, Paint.valueOf("sienna"));;
+                    verticalWall.setOnMouseClicked(event -> {controller.resetTurn();});
                     boardPane.add(cell, i ,j);
+
                     cell.setOnMouseClicked(event -> {
-                        if (verticalWallWasClicked && model.canPlaceWall(((verticalWall.getxCoordinate() + 1) / 2),
+                        if (view.verticalWallWasClicked && model.canPlaceWall(((verticalWall.getxCoordinate() + 1) / 2),
                                 ((verticalWall.getyCoordinate() + 3) / 2), true)) {
                             boardPane.add(verticalWall, verticalWall.getxCoordinate(), verticalWall.getyCoordinate(), 1, 3);
                             model.placeWall(((verticalWall.getxCoordinate() + 1) / 2), ((verticalWall.getyCoordinate() + 3) / 2), true);
                             model.wallPlaced();
-                            verticalWallWasClicked = false;
+                            view.verticalWallWasClicked = false;
                             model.endTurn();
                         }
-                        else if (horizontalWallWasClicked && model.canPlaceWall(((horizontalWall.getxCoordinate() + 3) / 2),
+                        else if (view.horizontalWallWasClicked && model.canPlaceWall(((horizontalWall.getxCoordinate() + 3) / 2),
                                 ((horizontalWall.getyCoordinate() + 1) / 2), false)) {
                             boardPane.add(horizontalWall, horizontalWall.getxCoordinate(), horizontalWall.getyCoordinate(), 3, 1);
                             model.placeWall(((horizontalWall.getxCoordinate() + 3) / 2), ((horizontalWall.getyCoordinate() + 1) / 2), false);
                             model.wallPlaced();
-                            horizontalWallWasClicked = false;
+                            view.horizontalWallWasClicked = false;
                             model.endTurn();
                         }
-                        view.setCursorToNormal();
+                        controller.resetTurn();
                     });
                 }
 
                 if (i%2==0 && j%2==1){
                     Cell cell = new Cell(i, j, tileSize, wallWidth, Paint.valueOf("white"));
+                    cell.setOnMouseClicked(event -> {controller.resetTurn();});
                     boardPane.add(cell, i ,j);
                 }
 
                 if (i%2==1 && j%2==0){
                     Cell cell = new Cell(i, j, wallWidth, tileSize, Paint.valueOf("white"));
+                    cell.setOnMouseClicked(event -> {controller.resetTurn();});
                     boardPane.add(cell, i ,j);
                 }
 
@@ -140,34 +140,6 @@ public class QuoridorBoard {
      */
     public GridPane getBoardPane() {
         return boardPane;
-    }
-
-    /**
-     * Sets the state that the next click of mouse triggers a new horizontal wall
-     */
-    public void setHorizontalWallWasClickedToTrue() {
-        horizontalWallWasClicked = true;
-    }
-
-    /**
-     * changes the state of horizontalWallWasClicked to false
-     */
-    public void setHorizontalWallWasClickedToFalse() {
-        horizontalWallWasClicked = false;
-    }
-
-    /**
-     * Sets the state that the next click of mouse triggers a new vertical wall
-     */
-    public void setVerticalWallWasClickedToTrue() {
-        verticalWallWasClicked = true;
-    }
-
-    /**
-     * changes the state of verticalWallWasClicked to false
-     */
-    public void setVerticalWallWasClickedToFalse() {
-        verticalWallWasClicked = false;
     }
 
     /**
