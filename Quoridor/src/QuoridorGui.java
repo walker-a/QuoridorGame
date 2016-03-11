@@ -61,6 +61,16 @@ public class QuoridorGui extends Application {
         Node playerOnePane = addPlayerOnePane("Player 1");
         Node playerTwoPane = addPlayerTwoPane("Player 2");
 
+        boardPane.setOnMouseEntered(event -> {
+            setCorrectCursor();
+        });
+        playerOnePane.setOnMouseEntered(event -> {
+            setCorrectCursor();
+        });
+        playerTwoPane.setOnMouseEntered(event -> {
+            setCorrectCursor();
+        });
+
         root.setTop(menuAndTitlePane);
         root.setCenter(boardPane);
         root.setLeft(playerOnePane);
@@ -245,6 +255,9 @@ public class QuoridorGui extends Application {
         GridPane titleMenuPane = new GridPane();
         Node menuPane = addMenus();
         Node titlePane = addTitlePane();
+        titlePane.setOnMouseEntered(event -> {
+            setCorrectCursor();
+        });
         titleMenuPane.add(menuPane, 0, 0);
         titleMenuPane.add(titlePane, 0, 1);
         return titleMenuPane;
@@ -276,9 +289,6 @@ public class QuoridorGui extends Application {
 
         menuPane.setOnMouseEntered(event -> {
             setCursorToNormal();
-        });
-        menuPane.setOnMouseExited(event -> {
-            setCursorToCorrect();
         });
 
         Menu gameMenu = new Menu("Quoridor");
@@ -379,7 +389,7 @@ public class QuoridorGui extends Application {
         verticalWallWasClicked = false;
     }
 
-    public void setCursorToCorrect() {
+    public void setCorrectCursor() {
         if (getHorizontalWallWasClicked()) {
             setCursorToHorizontalWall();
         }
