@@ -79,7 +79,8 @@ public class QuoridorController {
         resetTurn();
     }
 
-    public void playerOneHorizontalWallButtonOnClick(){ //Hopefully these will call something in model rather than view.
+    public void playerOneHorizontalWallButtonOnClick() { //Hopefully these will call something in model rather than view.
+        resetPawns();
         if (model.gameIsOver()) {
             return;
         }
@@ -94,6 +95,7 @@ public class QuoridorController {
     }
 
     public void playerTwoHorizontalWallButtonOnClick() { //Hopefully these will call something in model rather than view.
+        resetPawns();
         if (model.gameIsOver()) {
             return;
         }
@@ -109,6 +111,7 @@ public class QuoridorController {
     }
 
     public void playerOneVerticalWallButtonOnClick() { //Hopefully these will call something in model rather than view.
+        resetPawns();
         if (model.gameIsOver()) {
             return;
         }
@@ -124,6 +127,7 @@ public class QuoridorController {
     }
 
     public void playerTwoVerticalWallButtonOnClick() { //Hopefully these will call something in model rather than view.
+        resetPawns();
         if (model.gameIsOver()) {
             return;
         }
@@ -149,17 +153,20 @@ public class QuoridorController {
 
     public void resetTurn() {
         view.setCursorToNormal();
-        view.setHorizontalWallWasClickedToFalse();
-        view.setVerticalWallWasClickedToFalse();
-        model.unclickPawnOne();
-        model.unclickPawnTwo();
-        view.board.playerOne.changeColorToStart();
-        view.board.playerTwo.changeColorToStart();
+        resetWalls();
+        resetPawns();
     }
 
     public void resetWalls() {
         view.setHorizontalWallWasClickedToFalse();
         view.setVerticalWallWasClickedToFalse();
+    }
+
+    public void resetPawns() {
+        model.unclickPawnOne();
+        model.unclickPawnTwo();
+        view.board.playerOne.changeColorToStart();
+        view.board.playerTwo.changeColorToStart();
     }
 
     public static int convertFromGridPaneCoord(int gridPaneCoord) {
