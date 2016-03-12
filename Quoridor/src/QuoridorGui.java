@@ -1,6 +1,7 @@
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -9,9 +10,12 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
@@ -22,7 +26,7 @@ import javafx.stage.Stage;
 public class QuoridorGui extends Application {
     public static final int MIN_BUTTON_WIDTH = 60;
     public static final int SCENE_HEIGHT = 700;
-    public static final int SCENE_WIDTH = (int) (1.4 * SCENE_HEIGHT);
+    public static final int SCENE_WIDTH = (int) (1.38 * SCENE_HEIGHT);
     public QuoridorController controller;
     public QuoridorBoard board;
     public QuoridorModel model;
@@ -42,11 +46,12 @@ public class QuoridorGui extends Application {
     public Stage rulesStage;
     public Scene rulesScene;
     public final int menuHeight = 400;
-    public final int menuWidth = (int) (menuHeight * 1.4);
+    public final int menuWidth = (int) (menuHeight * 1.35);
     public final int rulesHeight = 700;
     public final int rulesWidth = (int) (700 * 1.4);
     public final int winStateHeight = 400;
     public final int winStateWidth = (int) (winStateHeight * 1.4);
+    public double boardWidth;
 
     public QuoridorGui() {
     }
@@ -180,6 +185,8 @@ public class QuoridorGui extends Application {
 
     public void setUpGameStage() {
         BorderPane root = new BorderPane();
+        root.setPrefSize(SCENE_WIDTH, SCENE_HEIGHT);
+
         Node boardPane = addBoard();
         Node menuAndTitlePane = addMenusAndTitles();
         Node playerOnePane = addPlayerOnePane("Player 1");
@@ -204,7 +211,7 @@ public class QuoridorGui extends Application {
 
         gameStage.setTitle("Quoridor Game");
         gameStage.setScene(gameScene);
-        gameStage.setResizable(false);
+        gameStage.setResizable(true);
 
         gameScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             public void handle(KeyEvent key) {
@@ -230,7 +237,7 @@ public class QuoridorGui extends Application {
      */
     private Node addPlayerOnePane(String playerName) {
         playerOnePane = new GridPane();
-        playerOnePane.setAlignment(Pos.CENTER);
+        playerOnePane.setAlignment(Pos.CENTER_LEFT);
         playerOnePane.setHgap(5);
         playerOnePane.setVgap(5);
         playerOnePane.setPadding(new Insets(0, 10, 0, 10));
@@ -238,16 +245,20 @@ public class QuoridorGui extends Application {
         Label playerNameLabel = new Label(playerName);
 
         Button placeHorizontalWallButton = new Button("Place Horizontal Wall");
+        placeHorizontalWallButton.setAlignment(Pos.CENTER_LEFT);
         placeHorizontalWallButton.setOnMouseClicked(event -> {
             controller.playerOneHorizontalWallButtonOnClick();
         });
 
         Button placeVerticalWallButton = new Button("Place Vertical Wall");
+        placeVerticalWallButton.setAlignment(Pos.CENTER);
         placeVerticalWallButton.setOnMouseClicked(event -> {
             controller.playerOneVerticalWallButtonOnClick();
         });
         Label playerOneWallCount = new Label("Wall Count: " + model.getPlayerOneWallCount());
+        playerOneWallCount.setAlignment(Pos.CENTER_LEFT);
         Label playerOneTurnLabel = new Label("Turn: ****");
+        playerOneTurnLabel.setAlignment(Pos.CENTER_LEFT);
 
         placeHorizontalWallButton.setMinWidth(MIN_BUTTON_WIDTH);
         placeVerticalWallButton.setMinWidth(MIN_BUTTON_WIDTH);
@@ -262,6 +273,8 @@ public class QuoridorGui extends Application {
         playerOnePane.add(playerOneTurnLabel, 0, 4);
         playerPaneLabels[0][4][0] = playerOneTurnLabel;
 
+        playerOnePane.setBackground(new Background(new BackgroundFill(Paint.valueOf("slategrey"), CornerRadii.EMPTY, Insets.EMPTY)));
+
         return playerOnePane;
     }
 
@@ -272,25 +285,30 @@ public class QuoridorGui extends Application {
      */
     private Node addPlayerTwoPane(String playerName) {
         playerTwoPane = new GridPane();
-        playerTwoPane.setAlignment(Pos.CENTER);
+        playerTwoPane.setAlignment(Pos.CENTER_RIGHT);
         playerTwoPane.setHgap(5);
         playerTwoPane.setVgap(5);
         playerTwoPane.setPadding(new Insets(0, 10, 0, 10));
 
         Label playerNameLabel = new Label(playerName);
+        playerTwoPane.setHalignment(playerNameLabel, HPos.RIGHT);
 
         Button placeHorizontalWallButton = new Button("Place Horizontal Wall");
+        playerTwoPane.setHalignment(placeHorizontalWallButton, HPos.RIGHT);
         placeHorizontalWallButton.setOnMouseClicked(event -> {
             controller.playerTwoHorizontalWallButtonOnClick();
         });
 
         Button placeVerticalWallButton = new Button("Place Vertical Wall");
+        playerTwoPane.setHalignment(placeVerticalWallButton, HPos.RIGHT);
         placeVerticalWallButton.setOnMouseClicked(event -> {
             controller.playerTwoVerticalWallButtonOnClick();
         });
         Label playerTwoWallCount = new Label("Wall Count: " + model.getPlayerTwoWallCount());
+        playerTwoPane.setHalignment(playerTwoWallCount, HPos.RIGHT);
 
         Label playerTwoTurnLabel = new Label("Turn:    ");
+        playerTwoPane.setHalignment(playerTwoTurnLabel, HPos.RIGHT);
 
         placeHorizontalWallButton.setMinWidth(MIN_BUTTON_WIDTH);
         placeVerticalWallButton.setMinWidth(MIN_BUTTON_WIDTH);
@@ -304,6 +322,8 @@ public class QuoridorGui extends Application {
 
         playerTwoPane.add(playerTwoTurnLabel, 0, 4);
         playerPaneLabels[0][4][1] = playerTwoTurnLabel;
+
+        playerTwoPane.setBackground(new Background(new BackgroundFill(Paint.valueOf("seashell"), CornerRadii.EMPTY, Insets.EMPTY)));
 
         return playerTwoPane;
     }
@@ -320,6 +340,8 @@ public class QuoridorGui extends Application {
         playerTwoPane.getChildren().remove(playerPaneLabels[0][3][1]);
         playerTwoPane.add(playerTwoWallCount, 0, 3);
         playerPaneLabels[0][3][1] = playerTwoWallCount;
+
+        playerTwoPane.setHalignment(playerTwoWallCount, HPos.RIGHT);
     }
 
     public void updateTurnLabels() {
@@ -338,6 +360,8 @@ public class QuoridorGui extends Application {
         playerTwoPane.add(playerTwoTurnLabel, 0, 4);
         playerPaneLabels[0][4][0] = playerOneTurnLabel;
         playerPaneLabels[0][4][1] = playerTwoTurnLabel;
+
+        playerTwoPane.setHalignment(playerTwoTurnLabel, HPos.RIGHT);
     }
 
     public void updateLabels(int playerOneCount, int playerTwoCount) {
@@ -352,7 +376,8 @@ public class QuoridorGui extends Application {
      */
     private Node addBoard() {
         GridPane boardPane = board.getBoardPane();
-        boardPane.setAlignment(Pos.TOP_CENTER);
+        boardPane.setAlignment(Pos.CENTER);
+        boardPane.setBackground(new Background(new BackgroundFill(Paint.valueOf("snow"), CornerRadii.EMPTY, Insets.EMPTY)));
 
         return boardPane;
     }
@@ -370,6 +395,8 @@ public class QuoridorGui extends Application {
         });
         titleMenuPane.add(menuPane, 0, 0);
         titleMenuPane.add(titlePane, 0, 1);
+
+        titleMenuPane.setBackground(new Background(new BackgroundFill(Paint.valueOf("snow"), CornerRadii.EMPTY, Insets.EMPTY)));
         return titleMenuPane;
     }
 
@@ -379,11 +406,27 @@ public class QuoridorGui extends Application {
      */
     private Node addTitlePane() {
         GridPane titlePane = new GridPane();
-        Label titleLabel = new Label("Quoridor");
-        titleLabel.setFont(new Font("Arial", SCENE_HEIGHT / 20));
-        titleLabel.setPadding(new Insets(10, 10, 10, 10));
-        titlePane.add(titleLabel, 0,  0);
-        titlePane.setAlignment(Pos.CENTER);
+
+        Rectangle leftSide = new Rectangle(SCENE_WIDTH/2 + 1, SCENE_WIDTH/20, Paint.valueOf("slategrey"));
+        Rectangle rightSide = new Rectangle(SCENE_WIDTH/2, SCENE_WIDTH/20, Paint.valueOf("seashell"));
+        titlePane.setAlignment(Pos.BOTTOM_CENTER);
+
+        Label titleLeftHalf = new Label("Q u o r ");
+        Label titleRightHalf = new Label(" i d o r");
+
+        titleLeftHalf.setFont(new Font("Hiragino Kaku Gothic Pro", SCENE_HEIGHT / 20));
+        titleLeftHalf.setTextFill(Paint.valueOf("seashell"));
+        titlePane.setHalignment(titleLeftHalf, HPos.LEFT);
+
+        titleRightHalf.setFont(new Font("Hiragino Kaku Gothic Pro", SCENE_HEIGHT / 20));
+        titleRightHalf.setTextFill(Paint.valueOf("slategrey"));
+        titlePane.setHalignment(titleLeftHalf, HPos.RIGHT);
+
+        titlePane.add(leftSide, 0, 0);
+        titlePane.add(rightSide, 1, 0);
+        titlePane.add(titleLeftHalf, 0, 0);
+        titlePane.add(titleRightHalf, 1, 0);
+
         return titlePane;
     }
 

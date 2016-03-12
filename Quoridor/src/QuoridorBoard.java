@@ -28,7 +28,7 @@ public class QuoridorBoard {
         boardPane.setHgap(0);
         boardPane.setVgap(0);
 
-        int pawnRadius = (int) (view.getSceneHeight() / 29);
+        int pawnRadius = (int) (view.getSceneHeight() / 27);
 
         playerOne = new Pawn(8, 16, pawnRadius, "slategrey");
         playerTwo = new Pawn(8, 0, pawnRadius, "seashell");
@@ -72,7 +72,7 @@ public class QuoridorBoard {
                 }
 
                 if (i%2==1 && j%2==1) {
-                    Cell cell = new Cell(i, j, wallWidth, wallWidth, Paint.valueOf("white"));
+                    Cell cell = new Cell(i, j, wallWidth, wallWidth, Paint.valueOf("snow"));
                     Cell horizontalWall = new Cell(i - 1, j, tileSize * 2 + wallWidth, wallWidth, Paint.valueOf("sienna"));
                     horizontalWall.setOnMouseClicked(event -> {controller.resetTurn();});
                     Cell verticalWall = new Cell(i, j - 1, wallWidth, tileSize * 2 + wallWidth, Paint.valueOf("sienna"));;
@@ -101,13 +101,13 @@ public class QuoridorBoard {
                 }
 
                 if (i%2==0 && j%2==1){
-                    Cell cell = new Cell(i, j, tileSize, wallWidth, Paint.valueOf("white"));
+                    Cell cell = new Cell(i, j, tileSize, wallWidth, Paint.valueOf("snow"));
                     cell.setOnMouseClicked(event -> {controller.resetTurn();});
                     boardPane.add(cell, i ,j);
                 }
 
                 if (i%2==1 && j%2==0){
-                    Cell cell = new Cell(i, j, wallWidth, tileSize, Paint.valueOf("white"));
+                    Cell cell = new Cell(i, j, wallWidth, tileSize, Paint.valueOf("snow"));
                     cell.setOnMouseClicked(event -> {controller.resetTurn();});
                     boardPane.add(cell, i ,j);
                 }
