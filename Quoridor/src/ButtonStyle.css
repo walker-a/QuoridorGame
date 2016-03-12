@@ -1,0 +1,31 @@
+.darkOnLight {
+    -fx-font: 13.5px "Hiragino Kaku Gothic Pro";
+    -fx-text-fill: slategray;
+    -fx-background-color: seashell;
+    -fx-background-radius: 0;
+}
+
+.darkOnLight:hover {
+    -fx-background-color: azure;
+}
+
+.playerOneLabel {
+    -fx-font: 14px "Hiragino Kaku Gothic Pro";
+    -fx-text-fill: seashell;
+}
+
+.lightOnDark {
+    -fx-font: 13.5px "Hiragino Kaku Gothic Pro";
+    -fx-text-fill: seashell;
+    -fx-background-color: slategray;
+    -fx-background-radius: 0;
+}
+
+.lightOnDark:hover {
+    -fx-background-color: steelblue;
+}
+
+.playerTwoLabel {
+    -fx-font: 14px "Hiragino Kaku Gothic Pro";
+    -fx-text-fill: slategray;
+}

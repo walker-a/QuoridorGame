@@ -10,7 +10,6 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
@@ -90,6 +89,8 @@ public class QuoridorGui extends Application {
 
         mainMenuScene = new Scene(root, menuWidth, menuHeight);
 
+        mainMenuScene.getStylesheets().add("ButtonStyle.css");
+
         mainMenuStage.setScene(mainMenuScene);
         mainMenuStage.setResizable(false);
         mainMenuStage.setTitle("Main Menu");
@@ -99,6 +100,7 @@ public class QuoridorGui extends Application {
         GridPane menuButtons = new GridPane();
 
         Button rulesButton = new Button("Rules");
+        rulesButton.getStyleClass().add("darkOnLight");
         rulesButton.setOnMouseClicked(event -> {
             showRulesStage();
         });
@@ -106,6 +108,7 @@ public class QuoridorGui extends Application {
         menuButtons.add(rulesButton, 0, 0);
 
         Button startGameButton = new Button("Start");
+        startGameButton.getStyleClass().add("lightOnDark");
         startGameButton.setOnMouseClicked(event -> {
             hideMainMenuStage();
             showGameStage();
@@ -141,6 +144,8 @@ public class QuoridorGui extends Application {
         root.setCenter(centerPane);
 
         rulesScene = new Scene(root, rulesWidth, rulesHeight);
+
+        rulesScene.getStylesheets().add("ButtonStyle.css");
 
         rulesStage.setScene(rulesScene);
         rulesStage.setResizable(false);
@@ -209,6 +214,8 @@ public class QuoridorGui extends Application {
 
         gameScene = new Scene(root, SCENE_WIDTH, SCENE_HEIGHT);
 
+        gameScene.getStylesheets().add("ButtonStyle.css");
+
         gameStage.setTitle("Quoridor Game");
         gameStage.setScene(gameScene);
         gameStage.setResizable(false);
@@ -242,23 +249,19 @@ public class QuoridorGui extends Application {
         playerOnePane.setVgap(5);
         playerOnePane.setPadding(new Insets(0, 10, 0, 10));
 
-        Label playerNameLabel = new Label(playerName);
+        Label playerNameLabel = getPlayerOneTextLabel(playerName);
 
-        Button placeHorizontalWallButton = new Button("Place Horizontal Wall");
-        placeHorizontalWallButton.setAlignment(Pos.CENTER_LEFT);
-        placeHorizontalWallButton.setOnMouseClicked(event -> {
-            controller.playerOneHorizontalWallButtonOnClick();
-        });
 
-        Button placeVerticalWallButton = new Button("Place Vertical Wall");
-        placeVerticalWallButton.setAlignment(Pos.CENTER);
-        placeVerticalWallButton.setOnMouseClicked(event -> {
-            controller.playerOneVerticalWallButtonOnClick();
-        });
-        Label playerOneWallCount = new Label("Wall Count: " + model.getPlayerOneWallCount());
-        playerOneWallCount.setAlignment(Pos.CENTER_LEFT);
-        Label playerOneTurnLabel = new Label("Turn: ****");
-        playerOneTurnLabel.setAlignment(Pos.CENTER_LEFT);
+        Button placeHorizontalWallButton = getHorizontalWallButtonPlayerOne();
+
+
+        Button placeVerticalWallButton = getVerticalWallButtonPlayerOne();
+
+
+        Label playerOneWallCount = getPlayerOneTextLabel("Wall Count: " + model.getPlayerOneWallCount());
+
+        Label playerOneTurnLabel = getPlayerOneTextLabel("Turn: ****");
+
 
         placeHorizontalWallButton.setMinWidth(MIN_BUTTON_WIDTH);
         placeVerticalWallButton.setMinWidth(MIN_BUTTON_WIDTH);
@@ -278,6 +281,32 @@ public class QuoridorGui extends Application {
         return playerOnePane;
     }
 
+    private Button getVerticalWallButtonPlayerOne() {
+        Button placeVerticalWallButton = new Button("Place Vertical Wall");
+        placeVerticalWallButton.getStyleClass().add("darkOnLight");
+        placeVerticalWallButton.setOnMouseClicked(event -> {
+            controller.playerOneVerticalWallButtonOnClick();
+        });
+        return placeVerticalWallButton;
+    }
+
+
+    private Button getHorizontalWallButtonPlayerOne() {
+        Button placeHorizontalWallButton = new Button("Place Horizontal Wall");
+        placeHorizontalWallButton.getStyleClass().add("darkOnLight");
+        placeHorizontalWallButton.setOnMouseClicked(event -> {
+            controller.playerOneHorizontalWallButtonOnClick();
+        });
+        return placeHorizontalWallButton;
+    }
+
+    private Label getPlayerOneTextLabel(String text) {
+        Label playerNameLabel = new Label(text);
+        playerNameLabel.getStyleClass().add("playerOneLabel");
+        playerNameLabel.setAlignment(Pos.CENTER_LEFT);
+        return playerNameLabel;
+    }
+
     /**
      * Adds a node for all the player functions going on the side panel
      * @param playerName
@@ -290,25 +319,16 @@ public class QuoridorGui extends Application {
         playerTwoPane.setVgap(5);
         playerTwoPane.setPadding(new Insets(0, 10, 0, 10));
 
-        Label playerNameLabel = new Label(playerName);
-        playerTwoPane.setHalignment(playerNameLabel, HPos.RIGHT);
+        Label playerNameLabel = getPlayerTwoTextLabel(playerName);
 
-        Button placeHorizontalWallButton = new Button("Place Horizontal Wall");
-        playerTwoPane.setHalignment(placeHorizontalWallButton, HPos.RIGHT);
-        placeHorizontalWallButton.setOnMouseClicked(event -> {
-            controller.playerTwoHorizontalWallButtonOnClick();
-        });
+        Button placeHorizontalWallButton = getHorizontalWallButtonPlayerTwo();
 
-        Button placeVerticalWallButton = new Button("Place Vertical Wall");
-        playerTwoPane.setHalignment(placeVerticalWallButton, HPos.RIGHT);
-        placeVerticalWallButton.setOnMouseClicked(event -> {
-            controller.playerTwoVerticalWallButtonOnClick();
-        });
-        Label playerTwoWallCount = new Label("Wall Count: " + model.getPlayerTwoWallCount());
-        playerTwoPane.setHalignment(playerTwoWallCount, HPos.RIGHT);
+        Button placeVerticalWallButton = getVerticalWallButtonPlayerTwo();
 
-        Label playerTwoTurnLabel = new Label("Turn:    ");
-        playerTwoPane.setHalignment(playerTwoTurnLabel, HPos.RIGHT);
+
+        Label playerTwoWallCount = getPlayerTwoTextLabel("Wall Count: " + model.getPlayerTwoWallCount());
+
+        Label playerTwoTurnLabel = getPlayerTwoTextLabel("Turn:    ");
 
         placeHorizontalWallButton.setMinWidth(MIN_BUTTON_WIDTH);
         placeVerticalWallButton.setMinWidth(MIN_BUTTON_WIDTH);
@@ -328,15 +348,42 @@ public class QuoridorGui extends Application {
         return playerTwoPane;
     }
 
+    private Button getVerticalWallButtonPlayerTwo() {
+        Button placeVerticalWallButton = new Button("Place Vertical Wall");
+        playerTwoPane.setHalignment(placeVerticalWallButton, HPos.RIGHT);
+        placeVerticalWallButton.getStyleClass().add("lightOnDark");
+        placeVerticalWallButton.setOnMouseClicked(event -> {
+            controller.playerTwoVerticalWallButtonOnClick();
+        });
+        return placeVerticalWallButton;
+    }
+
+    private Button getHorizontalWallButtonPlayerTwo() {
+        Button placeHorizontalWallButton = new Button("Place Horizontal Wall");
+        playerTwoPane.setHalignment(placeHorizontalWallButton, HPos.RIGHT);
+        placeHorizontalWallButton.getStyleClass().add("lightOnDark");
+        placeHorizontalWallButton.setOnMouseClicked(event -> {
+            controller.playerTwoHorizontalWallButtonOnClick();
+        });
+        return placeHorizontalWallButton;
+    }
+
+    private Label getPlayerTwoTextLabel(String text) {
+        Label playerNameLabel = new Label(text);
+        playerNameLabel.getStyleClass().add("playerTwoLabel");
+        playerTwoPane.setHalignment(playerNameLabel, HPos.RIGHT);
+        return playerNameLabel;
+    }
+
     public void updatePlayerOneWallCount(int count) {
-        Label playerOneWallCount = new Label("Wall Count: " + count + " ");
+        Label playerOneWallCount = getPlayerOneTextLabel("Wall Count: " + model.getPlayerOneWallCount());
         playerOnePane.getChildren().remove(playerPaneLabels[0][3][0]);
         playerOnePane.add(playerOneWallCount, 0, 3);
         playerPaneLabels[0][3][0] = playerOneWallCount;
     }
 
     public void updatePlayerTwoWallCount(int count) {
-        Label playerTwoWallCount = new Label("Wall Count: " + count + " ");
+        Label playerTwoWallCount = getPlayerTwoTextLabel("Wall Count: " + model.getPlayerTwoWallCount());
         playerTwoPane.getChildren().remove(playerPaneLabels[0][3][1]);
         playerTwoPane.add(playerTwoWallCount, 0, 3);
         playerPaneLabels[0][3][1] = playerTwoWallCount;
@@ -348,11 +395,11 @@ public class QuoridorGui extends Application {
         Label playerOneTurnLabel;
         Label playerTwoTurnLabel;
         if (model.isPlayerOneTurn()) {
-            playerOneTurnLabel = new Label("Turn: ****");
-            playerTwoTurnLabel = new Label("Turn:     ");
+            playerOneTurnLabel = getPlayerOneTextLabel("Turn: ****");
+            playerTwoTurnLabel = getPlayerTwoTextLabel("Turn:    ");
         } else {
-            playerTwoTurnLabel = new Label("Turn: ****");
-            playerOneTurnLabel = new Label("Turn:     ");
+            playerTwoTurnLabel = getPlayerTwoTextLabel("Turn: ****");
+            playerOneTurnLabel = getPlayerOneTextLabel("Turn:     ");
         }
         playerOnePane.getChildren().remove(playerPaneLabels[0][4][0]);
         playerTwoPane.getChildren().remove(playerPaneLabels[0][4][1]);
@@ -552,6 +599,8 @@ public class QuoridorGui extends Application {
         root.setCenter(centerPane);
 
         winStateScene = new Scene(root, winStateWidth, winStateHeight);
+
+        winStateScene.getStylesheets().add("ButtonStyle.css");
 
         winStateStage.setScene(winStateScene);
         winStateStage.setResizable(false);
