@@ -211,7 +211,7 @@ public class QuoridorGui extends Application {
 
         gameStage.setTitle("Quoridor Game");
         gameStage.setScene(gameScene);
-        gameStage.setResizable(true);
+        gameStage.setResizable(false);
 
         gameScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             public void handle(KeyEvent key) {
@@ -349,10 +349,10 @@ public class QuoridorGui extends Application {
         Label playerTwoTurnLabel;
         if (model.isPlayerOneTurn()) {
             playerOneTurnLabel = new Label("Turn: ****");
-            playerTwoTurnLabel = new Label("Turn:  ");
+            playerTwoTurnLabel = new Label("Turn:     ");
         } else {
             playerTwoTurnLabel = new Label("Turn: ****");
-            playerOneTurnLabel = new Label("Turn:  ");
+            playerOneTurnLabel = new Label("Turn:     ");
         }
         playerOnePane.getChildren().remove(playerPaneLabels[0][4][0]);
         playerTwoPane.getChildren().remove(playerPaneLabels[0][4][1]);
