@@ -10,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
@@ -17,6 +18,8 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+
+import java.util.Stack;
 
 /**
  * Overall view of the Quoridor game
@@ -44,12 +47,12 @@ public class QuoridorGui extends Application {
     public Scene winStateScene;
     public Stage rulesStage;
     public Scene rulesScene;
-    public final int menuHeight = 400;
-    public final int menuWidth = (int) (menuHeight * 1.35);
+    public final int menuHeight = 350;
+    public final int menuWidth = (int) (menuHeight * 1.7);
     public final int rulesHeight = 700;
-    public final int rulesWidth = (int) (700 * 1.4);
+    public final int rulesWidth = (int) (700 * 1.5);
     public final int winStateHeight = 400;
-    public final int winStateWidth = (int) (winStateHeight * 1.4);
+    public final int winStateWidth = (int) (winStateHeight * 1.5);
     public double boardWidth;
 
     public QuoridorGui() {
@@ -81,11 +84,11 @@ public class QuoridorGui extends Application {
     public void setUpMainMenuStage() {
         mainMenuStage = new Stage();
 
-        BorderPane root = new BorderPane();
-        Node bottomPane = addMenuButtons();
-        Node centerPane = addMenuGraphic();
-        root.setBottom(bottomPane);
-        root.setCenter(centerPane);
+        StackPane root = new StackPane();
+        Node frontPane = addMenuButtons();
+        ImageView backPane = addMenuGraphic();
+        backPane.fitWidthProperty().bind(mainMenuStage.widthProperty());
+        root.getChildren().addAll(backPane,frontPane);
 
         mainMenuScene = new Scene(root, menuWidth, menuHeight);
 
@@ -116,13 +119,13 @@ public class QuoridorGui extends Application {
         startGameButton.setMinWidth(MIN_BUTTON_WIDTH);
         menuButtons.add(startGameButton, 1, 0);
 
-        menuButtons.setAlignment(Pos.CENTER);
+        menuButtons.setAlignment(Pos.BOTTOM_CENTER);
 
         return menuButtons;
     }
 
-    public Node addMenuGraphic() {
-        Node menuGraphic = new Label();
+    public ImageView addMenuGraphic() {
+        ImageView menuGraphic = new ImageView(new Image("QuoridorMainMenuTitle.png", menuWidth, menuHeight, true, true));
         return menuGraphic;
     }
 
@@ -137,11 +140,11 @@ public class QuoridorGui extends Application {
     public void setUpRulesStage() {
         rulesStage = new Stage();
 
-        BorderPane root = new BorderPane();
-        Node buttonsPane = addRulesStageButtons();
-        Node centerPane = addRulesGraphic();
-        root.setBottom(buttonsPane);
-        root.setCenter(centerPane);
+        StackPane root = new StackPane();
+        Node frontPane = addRulesStageButtons();
+        ImageView backPane = addRulesGraphic();
+        backPane.fitWidthProperty().bind(rulesStage.widthProperty());
+        root.getChildren().addAll(backPane,frontPane);
 
         rulesScene = new Scene(root, rulesWidth, rulesHeight);
 
@@ -156,6 +159,7 @@ public class QuoridorGui extends Application {
         GridPane rulesButtons = new GridPane();
 
         Button mainMenuButton = new Button("Main Menu");
+        mainMenuButton.getStyleClass().add("darkOnLight");
         mainMenuButton.setOnMouseClicked(event -> {
             goToMainMenu();
         });
@@ -163,6 +167,7 @@ public class QuoridorGui extends Application {
         rulesButtons.add(mainMenuButton, 0, 0);
 
         Button startGameButton = new Button("Start Game");
+        startGameButton.getStyleClass().add("lightOnDark");
         startGameButton.setOnMouseClicked(event -> {
             hideMainMenuStage();
             hideRulesStage();
@@ -171,13 +176,13 @@ public class QuoridorGui extends Application {
         startGameButton.setMinWidth(MIN_BUTTON_WIDTH);
         rulesButtons.add(startGameButton, 1, 0);
 
-        rulesButtons.setAlignment(Pos.CENTER);
+        rulesButtons.setAlignment(Pos.BOTTOM_CENTER);
 
         return rulesButtons;
     }
-    public Node addRulesGraphic() {
-        Label rulesGraphic = new Label();
-        return new Label();
+    public ImageView addRulesGraphic() {
+        ImageView rulesGraphic = new ImageView(new Image("QuoridorRules.png", rulesWidth, rulesHeight, true, true));
+        return rulesGraphic;
     }
 
     public void showRulesStage() {
@@ -502,13 +507,22 @@ public class QuoridorGui extends Application {
             }
         });
 
+        MenuItem mainMenu = new MenuItem("MainMenu");
+
+        mainMenu.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                goToMainMenu();
+            }
+        });
+
         MenuItem quit = new MenuItem("Quit");
         quit.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {System.exit(0);}
         });
 
-        gameMenu.getItems().addAll(rules, quit);
+        gameMenu.getItems().addAll(rules, mainMenu, quit);
 
         Menu fileMenu = new Menu("File");
 
@@ -591,12 +605,12 @@ public class QuoridorGui extends Application {
 
     public void setUpWinStateStage(String playerName) {
         winStateStage = new Stage();
-
-        BorderPane root = new BorderPane();
-        Node buttonsPane = addWinStateStageButtons();
-        Node centerPane = addWinStateStageGraphic(playerName);
-        root.setBottom(buttonsPane);
-        root.setCenter(centerPane);
+        StackPane root = new StackPane();
+        Node frontPane = addWinStateStageButtons();
+        ImageView backPane = addWinStateStageGraphic(playerName);
+        backPane.fitWidthProperty().bind(winStateStage.widthProperty());
+        backPane.fitHeightProperty().bind(winStateStage.heightProperty());
+        root.getChildren().addAll(backPane,frontPane);
 
         winStateScene = new Scene(root, winStateWidth, winStateHeight);
 
@@ -611,6 +625,7 @@ public class QuoridorGui extends Application {
         GridPane winStateButtons = new GridPane();
 
         Button newGameButton = new Button("New Game");
+        newGameButton.getStyleClass().add("darkOnLight");
         newGameButton.setOnMouseClicked(event -> {
             hideWinStateStage();
             newGame();
@@ -619,20 +634,24 @@ public class QuoridorGui extends Application {
         winStateButtons.add(newGameButton, 0, 0);
 
         Button mainMenuButton = new Button("Main Menu");
+        mainMenuButton.getStyleClass().add("lightOnDark");
         mainMenuButton.setOnMouseClicked(event -> {
             goToMainMenu();
         });
         mainMenuButton.setMinWidth(MIN_BUTTON_WIDTH);
         winStateButtons.add(mainMenuButton, 1, 0);
 
-        winStateButtons.setAlignment(Pos.CENTER);
+        winStateButtons.setAlignment(Pos.BOTTOM_CENTER);
 
         return winStateButtons;
     }
 
-    public Node addWinStateStageGraphic(String playerName) {
-        Label winStateGraphic = new Label(playerName + " wins!!!");
-        winStateGraphic.setAlignment(Pos.CENTER);
+    public ImageView addWinStateStageGraphic(String playerName) {
+        String pictureName = "PlayerOneWinsImage.png";
+        if (playerName.equals("Player Two")) {
+            pictureName = "PlayerTwoWinsImage.png";
+        }
+        ImageView winStateGraphic = new ImageView(new Image(pictureName, rulesWidth, rulesHeight, true, true));
         return winStateGraphic;
     }
 
