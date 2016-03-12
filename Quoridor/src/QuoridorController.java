@@ -18,7 +18,7 @@ public class QuoridorController {
 
         if (model.isPlayerOneTurn() && !model.pawnOneIsClicked()) {
             model.clickPawnOne();
-            view.board.playerOne.changeColor("slateblue");
+            view.board.playerOne.changeColor("lightgrey");
             view.setCursorToNormal();
             resetWalls();
         }
@@ -34,7 +34,7 @@ public class QuoridorController {
 
         if (!model.isPlayerOneTurn() && !model.pawnTwoIsClicked()) {
             model.clickPawnTwo();
-            view.board.playerTwo.changeColor("seagreen");
+            view.board.playerTwo.changeColor("lightgrey");
             view.setCursorToNormal();
             resetWalls();
         }
