@@ -125,7 +125,7 @@ public class QuoridorGui extends Application {
     }
 
     public ImageView addMenuGraphic() {
-        ImageView menuGraphic = new ImageView(new Image("QuoridorMainMenuTitle.png", menuWidth, menuHeight, true, true));
+        ImageView menuGraphic = new ImageView(new Image("QuoridorMainMenuTitle.png"));
         return menuGraphic;
     }
 
@@ -146,7 +146,7 @@ public class QuoridorGui extends Application {
         backPane.fitWidthProperty().bind(rulesStage.widthProperty());
         root.getChildren().addAll(backPane,frontPane);
 
-        rulesScene = new Scene(root, rulesWidth, rulesHeight);
+        rulesScene = new Scene(root);
 
         rulesScene.getStylesheets().add("ButtonStyle.css");
 
