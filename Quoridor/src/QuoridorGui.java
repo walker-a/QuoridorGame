@@ -58,6 +58,11 @@ public class QuoridorGui extends Application {
     public QuoridorGui() {
     }
 
+    /**
+     * Sets up references to the model and controller.
+     * @param quoridorController
+     * @param quoridorModel
+     */
     public void setSystems(QuoridorController quoridorController, QuoridorModel quoridorModel) {
         model = quoridorModel;
         controller = quoridorController;
@@ -81,6 +86,9 @@ public class QuoridorGui extends Application {
         setUpRulesStage();
     }
 
+    /**
+     * Instantiates the main menu window.
+     */
     public void setUpMainMenuStage() {
         mainMenuStage = new Stage();
 
@@ -99,6 +107,10 @@ public class QuoridorGui extends Application {
         mainMenuStage.setTitle("Main Menu");
     }
 
+    /**
+     * Adds buttons to the main menu window.
+     * @return
+     */
     public Node addMenuButtons() {
         GridPane menuButtons = new GridPane();
 
@@ -124,6 +136,10 @@ public class QuoridorGui extends Application {
         return menuButtons;
     }
 
+    /**
+     * Adds title image to the main menu window.
+     * @return
+     */
     public ImageView addMenuGraphic() {
         ImageView menuGraphic = new ImageView(new Image("QuoridorMainMenuTitle.png"));
         return menuGraphic;
@@ -137,6 +153,9 @@ public class QuoridorGui extends Application {
         mainMenuStage.hide();
     }
 
+    /**
+     * Instantiates the rules window.
+     */
     public void setUpRulesStage() {
         rulesStage = new Stage();
 
@@ -155,6 +174,10 @@ public class QuoridorGui extends Application {
         rulesStage.setTitle("Rules");
     }
 
+    /**
+     * Adds buttons to the rules window.
+     * @return
+     */
     public Node addRulesStageButtons() {
         GridPane rulesButtons = new GridPane();
 
@@ -180,6 +203,11 @@ public class QuoridorGui extends Application {
 
         return rulesButtons;
     }
+
+    /**
+     * Adds a picture of the rules document to the rules window.
+     * @return
+     */
     public ImageView addRulesGraphic() {
         ImageView rulesGraphic = new ImageView(new Image("QuoridorRules.png", rulesWidth, rulesHeight, true, true));
         return rulesGraphic;
@@ -193,6 +221,9 @@ public class QuoridorGui extends Application {
         rulesStage.hide();
     }
 
+    /**
+     * Instantiates the actual gameplay window.
+     */
     public void setUpGameStage() {
         BorderPane root = new BorderPane();
         root.setPrefSize(SCENE_WIDTH, SCENE_HEIGHT);
@@ -265,7 +296,7 @@ public class QuoridorGui extends Application {
 
         Label playerOneWallCount = getPlayerOneTextLabel("Wall Count: " + model.getPlayerOneWallCount());
 
-        Label playerOneTurnLabel = getPlayerOneTextLabel("Turn: ****");
+        Label playerOneTurnLabel = getPlayerOneTextLabel("It's your turn!");
 
 
         placeHorizontalWallButton.setMinWidth(MIN_BUTTON_WIDTH);
@@ -286,6 +317,10 @@ public class QuoridorGui extends Application {
         return playerOnePane;
     }
 
+    /**
+     * Instantiates button for Player 1 to click to place a vertical wall.
+     * @return
+     */
     private Button getVerticalWallButtonPlayerOne() {
         Button placeVerticalWallButton = new Button("Place Vertical Wall");
         placeVerticalWallButton.getStyleClass().add("darkOnLight");
@@ -296,6 +331,10 @@ public class QuoridorGui extends Application {
     }
 
 
+    /**
+     * Instantiates button for Player 1 to click to place a horizontal wall.
+     * @return
+     */
     private Button getHorizontalWallButtonPlayerOne() {
         Button placeHorizontalWallButton = new Button("Place Horizontal Wall");
         placeHorizontalWallButton.getStyleClass().add("darkOnLight");
@@ -305,6 +344,11 @@ public class QuoridorGui extends Application {
         return placeHorizontalWallButton;
     }
 
+    /**
+     * Instantiates a label that tells which player is Player 1.
+     * @param text
+     * @return
+     */
     private Label getPlayerOneTextLabel(String text) {
         Label playerNameLabel = new Label(text);
         playerNameLabel.getStyleClass().add("playerOneLabel");
@@ -333,7 +377,7 @@ public class QuoridorGui extends Application {
 
         Label playerTwoWallCount = getPlayerTwoTextLabel("Wall Count: " + model.getPlayerTwoWallCount());
 
-        Label playerTwoTurnLabel = getPlayerTwoTextLabel("Turn:    ");
+        Label playerTwoTurnLabel = getPlayerTwoTextLabel("");
 
         placeHorizontalWallButton.setMinWidth(MIN_BUTTON_WIDTH);
         placeVerticalWallButton.setMinWidth(MIN_BUTTON_WIDTH);
@@ -353,6 +397,10 @@ public class QuoridorGui extends Application {
         return playerTwoPane;
     }
 
+    /**
+     * Instantiates button for Player 2 to click to place a vertical wall.
+     * @return
+     */
     private Button getVerticalWallButtonPlayerTwo() {
         Button placeVerticalWallButton = new Button("Place Vertical Wall");
         playerTwoPane.setHalignment(placeVerticalWallButton, HPos.RIGHT);
@@ -363,6 +411,10 @@ public class QuoridorGui extends Application {
         return placeVerticalWallButton;
     }
 
+    /**
+     * Instantiates button for Player 2 to click to place a horizontal wall.
+     * @return
+     */
     private Button getHorizontalWallButtonPlayerTwo() {
         Button placeHorizontalWallButton = new Button("Place Horizontal Wall");
         playerTwoPane.setHalignment(placeHorizontalWallButton, HPos.RIGHT);
@@ -373,6 +425,11 @@ public class QuoridorGui extends Application {
         return placeHorizontalWallButton;
     }
 
+    /**
+     * Instantiates a label that tells which player is Player 1.
+     * @param text
+     * @return
+     */
     private Label getPlayerTwoTextLabel(String text) {
         Label playerNameLabel = new Label(text);
         playerNameLabel.getStyleClass().add("playerTwoLabel");
@@ -380,6 +437,10 @@ public class QuoridorGui extends Application {
         return playerNameLabel;
     }
 
+    /**
+     * Decreases Player 1 wall count after a wall is placed by Player 1.
+     * @param count
+     */
     public void updatePlayerOneWallCount(int count) {
         Label playerOneWallCount = getPlayerOneTextLabel("Wall Count: " + model.getPlayerOneWallCount());
         playerOnePane.getChildren().remove(playerPaneLabels[0][3][0]);
@@ -387,6 +448,10 @@ public class QuoridorGui extends Application {
         playerPaneLabels[0][3][0] = playerOneWallCount;
     }
 
+    /**
+     * Decreases Player 2 wall count after a wall is placed by Player 2.
+     * @param count
+     */
     public void updatePlayerTwoWallCount(int count) {
         Label playerTwoWallCount = getPlayerTwoTextLabel("Wall Count: " + model.getPlayerTwoWallCount());
         playerTwoPane.getChildren().remove(playerPaneLabels[0][3][1]);
@@ -396,15 +461,18 @@ public class QuoridorGui extends Application {
         playerTwoPane.setHalignment(playerTwoWallCount, HPos.RIGHT);
     }
 
+    /**
+     * Declares labels to indicate whose turn it is.
+     */
     public void updateTurnLabels() {
         Label playerOneTurnLabel;
         Label playerTwoTurnLabel;
         if (model.isPlayerOneTurn()) {
-            playerOneTurnLabel = getPlayerOneTextLabel("Turn: ****");
-            playerTwoTurnLabel = getPlayerTwoTextLabel("Turn:    ");
+            playerOneTurnLabel = getPlayerOneTextLabel("It's your turn!");
+            playerTwoTurnLabel = getPlayerTwoTextLabel("");
         } else {
-            playerTwoTurnLabel = getPlayerTwoTextLabel("Turn: ****");
-            playerOneTurnLabel = getPlayerOneTextLabel("Turn:     ");
+            playerTwoTurnLabel = getPlayerTwoTextLabel("It's your turn!");
+            playerOneTurnLabel = getPlayerOneTextLabel("");
         }
         playerOnePane.getChildren().remove(playerPaneLabels[0][4][0]);
         playerTwoPane.getChildren().remove(playerPaneLabels[0][4][1]);
@@ -416,6 +484,11 @@ public class QuoridorGui extends Application {
         playerTwoPane.setHalignment(playerTwoTurnLabel, HPos.RIGHT);
     }
 
+    /**
+     * Changes label to indicate whose turn it is and updates wall counts.
+     * @param playerOneCount
+     * @param playerTwoCount
+     */
     public void updateLabels(int playerOneCount, int playerTwoCount) {
         updateTurnLabels();
         updatePlayerOneWallCount(playerOneCount);
@@ -542,6 +615,9 @@ public class QuoridorGui extends Application {
         return menuPane;
     }
 
+    /**
+     * Instantiates cursors to show a wall after a place wall button was clicked.
+     */
     private void setUpCursors() {
         //Sets up the image cursors
         int tileWidth = (int) (getSceneHeight() / 29 * 2.25);
@@ -552,14 +628,23 @@ public class QuoridorGui extends Application {
         verticalWallCursor = new ImageCursor(verticalWallImage, wallWidth / 2, tileWidth + wallWidth / 2);
     }
 
+    /**
+     * Returns cursors to normal.
+     */
     public void setCursorToNormal() {
         gameScene.setCursor(Cursor.DEFAULT);
     }
 
+    /**
+     * Changes cursor to show a horizontal wall after a place horizontal wall button was clicked.
+     */
     public void setCursorToHorizontalWall() {
         gameScene.setCursor(horizontalWallCursor);
     }
 
+    /**
+     * Changes cursor to show a vertical wall after a place vertical wall button was clicked.
+     */
     public void setCursorToVerticalWall() {
         gameScene.setCursor(verticalWallCursor);
     }
@@ -569,6 +654,9 @@ public class QuoridorGui extends Application {
         showGameStage();
     }
 
+    /**
+     * Starts a new game.
+     */
     public void restartOnNewGame() {
         gameStage.close();
         controller = new QuoridorController(this);
@@ -577,6 +665,9 @@ public class QuoridorGui extends Application {
         setUpGameStage();
     }
 
+    /**
+     * Goes back to the main menu title screen.
+     */
     public void goToMainMenu() {
         try {
             gameStage.close();
@@ -593,16 +684,26 @@ public class QuoridorGui extends Application {
         start(new Stage());
     }
 
+    /**
+     * Shows window indicating Player 1 has won.
+     */
     public void playerOneWins() {
         setUpWinStateStage("Player One");
         showWinStateStage();
     }
 
+    /**
+     * Show window indicating Player 2 has won.
+     */
     public void playerTwoWins() {
         setUpWinStateStage("Player Two");
         showWinStateStage();
     }
 
+    /**
+     * Builds window to declare a winner.
+     * @param playerName
+     */
     public void setUpWinStateStage(String playerName) {
         winStateStage = new Stage();
         StackPane root = new StackPane();
@@ -621,6 +722,10 @@ public class QuoridorGui extends Application {
         winStateStage.setTitle(playerName + " Wins");
     }
 
+    /**
+     * Adds buttons to the window that declares a winner.
+     * @return
+     */
     public Node addWinStateStageButtons() {
         GridPane winStateButtons = new GridPane();
 
@@ -646,6 +751,11 @@ public class QuoridorGui extends Application {
         return winStateButtons;
     }
 
+    /**
+     * Actually makes the window declaring a winner.
+     * @param playerName
+     * @return
+     */
     public ImageView addWinStateStageGraphic(String playerName) {
         String pictureName = "PlayerOneWinsImage.png";
         if (playerName.equals("Player Two")) {

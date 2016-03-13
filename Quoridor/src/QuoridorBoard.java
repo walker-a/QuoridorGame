@@ -80,23 +80,7 @@ public class QuoridorBoard {
                     boardPane.add(cell, i ,j);
 
                     cell.setOnMouseClicked(event -> {
-                        if (view.verticalWallWasClicked && model.canPlaceWall(((verticalWall.getxCoordinate() + 1) / 2),
-                                ((verticalWall.getyCoordinate() + 3) / 2), true)) {
-                            boardPane.add(verticalWall, verticalWall.getxCoordinate(), verticalWall.getyCoordinate(), 1, 3);
-                            model.placeWall(((verticalWall.getxCoordinate() + 1) / 2), ((verticalWall.getyCoordinate() + 3) / 2), true);
-                            model.wallPlaced();
-                            view.verticalWallWasClicked = false;
-                            model.endTurn();
-                        }
-                        else if (view.horizontalWallWasClicked && model.canPlaceWall(((horizontalWall.getxCoordinate() + 3) / 2),
-                                ((horizontalWall.getyCoordinate() + 1) / 2), false)) {
-                            boardPane.add(horizontalWall, horizontalWall.getxCoordinate(), horizontalWall.getyCoordinate(), 3, 1);
-                            model.placeWall(((horizontalWall.getxCoordinate() + 3) / 2), ((horizontalWall.getyCoordinate() + 1) / 2), false);
-                            model.wallPlaced();
-                            view.horizontalWallWasClicked = false;
-                            model.endTurn();
-                        }
-                        controller.resetTurn();
+                        controller.OnClickForPlaceWallCells(horizontalWall, verticalWall);
                     });
                 }
 
