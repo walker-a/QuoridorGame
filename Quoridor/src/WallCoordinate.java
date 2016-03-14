@@ -1,5 +1,6 @@
 /**
- * Created by walkera2 on 3/8/16.
+ * Created by Alex Walker, Isaac Garfinkle, and Mitchell Biewen on 3/8/16.
+ * Mainly used to change the coodinates of a wall to grid pane coordinates.
  */
 public class WallCoordinate {
     int centerPointX;

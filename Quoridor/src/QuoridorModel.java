@@ -1,9 +1,13 @@
 /**
- * Created by walkera2 on 3/8/16.
+ * Created by Alex Walker, Isaac Garfinkle, and Mitchell Biewen on 3/8/16.
  */
 import java.util.Queue;
 import java.util.ArrayList;
 import java.util.LinkedList;
+
+/**
+ * The model implementation of the MVC design.
+ */
 
 public class QuoridorModel {
     private Coordinate playerOnePawn;
@@ -20,6 +24,11 @@ public class QuoridorModel {
     private int playerTwoYGoal;
     private boolean playerHasWon;
 
+    /**
+     * Instantiates possible places for walls and conditions for which to start the game.
+     * @param controller
+     * @param view
+     */
     public QuoridorModel(QuoridorController controller, QuoridorGui view) {
         this.controller = controller;
         this.view = view;
@@ -55,6 +64,9 @@ public class QuoridorModel {
         playerHasWon = false;
     }
 
+    /**
+     * Switches the player whose turn it is.
+     */
     public void endTurn() {
         if (playerOneTurn) {
             playerOneTurn = false;
@@ -66,6 +78,13 @@ public class QuoridorModel {
         view.updateLabels(getPlayerOneWallCount(), getPlayerTwoWallCount());
     }
 
+    /**
+     * Determines whether or not a wall can be placed at given coordinates.
+     * @param xCoord
+     * @param yCoord
+     * @param vertical
+     * @return
+     */
     public boolean canPlaceWall(int xCoord, int yCoord, boolean vertical) {
         Coordinate coordinate = new Coordinate(xCoord,yCoord);
 
@@ -114,6 +133,12 @@ public class QuoridorModel {
         return false;
     }
 
+    /**
+     * Determines whether or not a pawn still has a path to the other side given wall placements.
+     * @param pawn
+     * @param goalRow
+     * @return
+     */
     public boolean hasPath(Coordinate pawn, int goalRow) {
         Queue<Coordinate> toRead = new LinkedList<Coordinate>();
         Queue<Coordinate> read = new LinkedList<Coordinate>();
@@ -141,6 +166,12 @@ public class QuoridorModel {
 
     }
 
+    /**
+     * Updates storage of whether or not a wall exists at given coordinates.
+     * @param xCoord
+     * @param yCoord
+     * @param vertical
+     */
     public void placeWall(int xCoord, int yCoord, boolean vertical) {
         if (vertical) {
             placeEastWall(xCoord, yCoord);
@@ -151,6 +182,9 @@ public class QuoridorModel {
         }
     }
 
+    /**
+     * Updates wall count.
+     */
     public void wallPlaced() {
         if (isPlayerOneTurn() && playerOneWallCount > 0) {
             playerOneWallCount--;
@@ -159,6 +193,13 @@ public class QuoridorModel {
             playerTwoWallCount--;
         }
     }
+
+    /**
+     * The following methods add and remove walls on a given side of each cell.
+     * @param xCoord
+     * @param yCoord
+     * @param vertical
+     */
 
     public void removeWall(int xCoord, int yCoord, boolean vertical) {
         if (vertical) {
@@ -226,6 +267,12 @@ public class QuoridorModel {
         }
     }
 
+    /**
+     * Determines whether or not a pawn can move to a given cell.
+     * @param xCoord
+     * @param yCoord
+     * @return
+     */
     public boolean pawnCanMoveTo(int xCoord, int yCoord) {
         Coordinate destination = new Coordinate(xCoord,yCoord);
         Coordinate pawnCoord;
@@ -273,6 +320,12 @@ public class QuoridorModel {
         return false;
     }
 
+    /**
+     * Checks for a wall between two adjacent tiles.
+     * @param init
+     * @param end
+     * @return
+     */
     public boolean checkIfWallBetweenTiles(Coordinate init, Coordinate end) { //Assumes tiles are adjacent
         if (init.getXCoord() - end.getXCoord() == 1) {
             return wallsOnBoard[end.getXCoord()-1][end.getYCoord()-1][1];
@@ -286,6 +339,12 @@ public class QuoridorModel {
         return true;
     }
 
+    /**
+     * Determines which side of the tile has a wall on it.
+     * @param init
+     * @param end
+     * @return
+     */
     public int directionBetweenTiles(Coordinate init, Coordinate end) { //Assumes tiles are adjacent
         if (init.getXCoord() - end.getXCoord() == 1) {
             return 3;
@@ -298,6 +357,11 @@ public class QuoridorModel {
         }
     }
 
+    /**
+     * Changes the location of a pawn.
+     * @param xCoord
+     * @param yCoord
+     */
     public void updatePawnCoords(int xCoord, int yCoord) {
         if (playerOneTurn) {
             playerOnePawn.updateCoords(xCoord, yCoord);
@@ -314,6 +378,12 @@ public class QuoridorModel {
         }
     }
 
+    /**
+     * Returns the tile on the other side of a wall direction.
+     * @param coordinate
+     * @param direction
+     * @return
+     */
     public Coordinate getNextCell(Coordinate coordinate, int direction) {
         if (direction == 1) {
             return new Coordinate(coordinate.getXCoord()+1, coordinate.getYCoord());
@@ -329,10 +399,15 @@ public class QuoridorModel {
         }
     }
 
+    /**
+     * Determines if a wall is at a given direction of a given coordinate.
+     * @param coordinate
+     * @param direction
+     * @return
+     */
     public boolean isWall(Coordinate coordinate, int direction) {
         return wallsOnBoard[coordinate.getXCoord()-1][coordinate.getYCoord()-1][direction];
     }
-
 
     public boolean isPlayerOneTurn() {
         return playerOneTurn;
@@ -374,21 +449,38 @@ public class QuoridorModel {
         return playerHasWon;
     }
 
-
+    /**
+     * A new class to create a coordinate object.
+     */
     public class Coordinate {
         int xCoord;
         int yCoord;
 
+        /**
+         * Instantiates an instance of a Coordinate.
+         * @param xCoordinate
+         * @param yCoordinate
+         */
         public Coordinate(int xCoordinate, int yCoordinate) {
             xCoord = xCoordinate;
             yCoord = yCoordinate;
         }
 
+        /**
+         * Updates where the Coordinate is.
+         * @param xCoordinate
+         * @param yCoordinate
+         */
         public void updateCoords(int xCoordinate, int yCoordinate) {
             xCoord = xCoordinate;
             yCoord = yCoordinate;
         }
 
+        /**
+         * Determines if two coordinates are adjacent.
+         * @param coordinate
+         * @return
+         */
         public boolean isAdjacent(Coordinate coordinate) {
             if ((Math.abs(coordinate.getXCoord() - xCoord) == 1 && coordinate.getYCoord() == yCoord) || (coordinate.getXCoord() == xCoord && Math.abs(coordinate.getYCoord() - yCoord) == 1)) {
                 return true;
@@ -396,6 +488,11 @@ public class QuoridorModel {
             return false;
         }
 
+        /**
+         * Determines if two coordinates are the same.
+         * @param coordinate
+         * @return
+         */
         public boolean equals(Coordinate coordinate) {
             return ((coordinate.getXCoord() == xCoord) && (coordinate.getYCoord() == yCoord));
         }
@@ -408,6 +505,10 @@ public class QuoridorModel {
             return yCoord;
         }
 
+        /**
+         * Stores the neighbors of a given coordinate if there is no wall in between.
+         * @return
+         */
         public ArrayList<Coordinate> neighborList() {
             ArrayList<Coordinate> neighbors = new ArrayList<Coordinate>();
             if (!isWall(this,0)) {
