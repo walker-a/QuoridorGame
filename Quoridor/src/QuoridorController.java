@@ -9,7 +9,7 @@ public class QuoridorController {
 
     /**
      * Instantiates references to the model and view.
-     * @param view
+     * @param view is a QuoridorView object for the controller to interact with
      */
     public QuoridorController(QuoridorGui view) {
         this.view = view;
@@ -56,7 +56,7 @@ public class QuoridorController {
 
     /**
      * Moves player's pawn to clicked cell if move is legal.
-     * @param cell
+     * @param cell is the cell clicked on.
      */
     public void emptyCellClicked(QuoridorBoard.Cell cell) {
         if (model.gameIsOver()) {
