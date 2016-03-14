@@ -234,7 +234,7 @@ public class QuoridorController {
 
     /**
      * Changes the gridPane coordinates to the "game coordinates" (used to figure out which cells were clicked).
-     * @param gridPaneCoord
+     * @param gridPaneCoord is the coordinate to be converted.
      * @return
      */
     public static int convertFromGridPaneCoord(int gridPaneCoord) {
