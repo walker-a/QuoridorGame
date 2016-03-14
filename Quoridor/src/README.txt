@@ -1,0 +1,7 @@
+README file for CS257 Final Project: Quoridor
+Mitchell Biewen
+Isaac Garfinkle
+Alex Walker
+3/14/16
+
+Our project is a computer version of the board game Quoridor.  In this version of the game, 2 players take turns either moving their pawn or placing a wall on the board.  The objective of the game is to reach the other side of the board with your pawn, but players can strategically place walls blocking the opponent's path, as long as there still remains a possible path to the goal line.  More specific rules are included in the Rules window of the game.  To play, after clicking 'Start Game' in the main menu, click on your pawn and then an adjacent square to move it there, or click on a 'Place Wall' button to place a wall.  If you want to deselect whatever you were previously selecting, you can reclick what you clicked to select it in the first place (either the place wall button or the actual pawn), you can click anywhere on the board (as long as it is not a valid move), or you can press the escape key. The executable file is QuoridorGui and there are no bugs that we know of. The only minor issues currently happening are that the resolution of the images is reduced when the png files are put into the window for some reason, and also the 'start game' button on the rules menu does not change to say 'resume game' when opened in the middle of a game.
